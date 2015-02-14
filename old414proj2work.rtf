@@ -1,0 +1,328 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf400
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 options\{\
+	/* Code to set varoius options flags */\
+	IGNORE_CASE=false;\
+\}\
+\
+PARSER_BEGIN(simplejava)\
+\
+public class simplejava\{\
+	/* This segment is often empty */\
+\}\
+\
+/* PARSER_END(simplejava) \{ */\
+	/* This segment is often empty */\
+/* \} */\
+\
+PARSER_END(simplejava)\
+\
+TOKEN_MGR_DECLS:\
+\{\
+	/* Declarations used by lexical analyzer */\
+	public static int nesting = 0;\
+\}\
+\
+/* Token Rules and Actions */\
+/* /////////////////////// */\
+/* //////////////////////  */\
+SKIP : \
+\{\
+    	< " " >\
+|    	< "\\\\t">\
+|    	< "\\t">\
+|		< "EOF">\
+|		< "\\n">\
+\}\
+\
+SKIP:\
+\{\
+	"/*" \{nesting++;\}: WithinComment\
+\}\
+\
+<WithinComment> SKIP:\
+\{\
+	"/*" \{nesting++;\}\
+	| "*/" \{nesting--;\
+		if(nesting == 0) \{\
+			SwitchTo(DEFAULT);\
+		\}\
+	\}\
+	| <~[]>\
+\}\
+\
+SKIP :\
+\{\
+	<"//" (~["\\n"])* "\\n">\
+\}\
+\
+TOKEN : \
+\{\
+	< ELSE: "else">\
+|	< FOR: "for">\
+|	< IF: "if">\
+|	< WHILE: "while">\
+|	< DO: "do">\
+|	< CLASS: "class">\
+|	< TRUE: "true">\
+|	< FALSE: "false">\
+|	< RETURN: "return">\
+|	< NEW: "new">\
+\}\
+\
+TOKEN : \
+\{\
+	< PLUS: "+" >\
+|	< SEMICOLON: ";">\
+|	< MINUS: "-">\
+|	< TIMES: "*">\
+|	< DIVIDE: "/">\
+|	< EQUAL: "==">\
+|	< GREATER_THAN: ">">\
+|	< NOT: "!">\
+|	< LEFT_BRACE: "\{">\
+|	< LEFT_BRACKET: "[">\
+|	< RIGHT_BRACKET: "]">\
+|	< PERIOD: ".">\
+|	< COMMA: ",">\
+|	< GREATER_THAN_OR_EQUAL_TO: ">=">\
+|	< AND: "&&">\
+|	< RIGHT_BRACE: "\}">\
+|	< LEFT_PARENTHESIS: "(">\
+|	< RIGHT_PARENTHESIS: ")">\
+|	< NOT_EQUAL: "!=">\
+|	< LESS_THAN_OR_EQUAL_TO: "<=">\
+|	< LESS_THAN: "<">\
+|	< GETS: "=">\
+|	< OR: "||">\
+|	< PLUSPLUS: "++">\
+|   < INTEGER_LITERAL: (["0"-"9"])*>\
+|	< IDENTIFIERS: ["A"-"Z","a"-"z","_"]((["A"-"Z","a"-"z","0"-"9","_"])*)>\
+|	< ONEVALUE: (["1"])>\
+|	< MINUSMINUS: "--">\
+/*|	< BYTE: "byte"> */\
+/*|	< SHORT: "short"> */\
+/*|	< INT: "int"> */\
+/*|	< LONG: "long"> */\
+/*|	< FLOAT: "float"> */\
+/*|	< DOUBLE: "double"> */\
+/*|	< BOOLEAN: "boolean"> */\
+/*|	< CHAR: "char"> */\
+\}\
+\
+/* Rules and Actions -- EBNF for language*/\
+/* /////////////////////////////////////*/\
+/* ////////////////////////////////////*/\
+\
+/* void NonTerminalstatement() : */\
+/*	\{ Java Declarations \}	*/\
+/*	\{Rule Definition \}   */\
+\
+void statement() :\
+\{\}\
+\{	\
+/*  DO-WHILE STATEMENTS */\
+	dowhilestatement()\
+/* ASSIGNMENT STATEMENTS */\
+|	assignmentstatement()\
+/* INCREMENT STATEMENTS */\
+|	incrementstatement()\
+|	decrementstatement()\
+/* VARIABLE DECLARATION */\
+|	<IDENTIFIERS> <IDENTIFIERS>\
+/*|	type() <IDENTIFIERS> */\
+/*|	type() <IDENTIFIERS> <GETS> <IDENTIFIERS> */\
+|	<IDENTIFIERS> <IDENTIFIERS> <GETS> <IDENTIFIERS>\
+/*|type() <IDENTIFIERS> <GETS> <INTEGER_LITERAL> */\
+|	<IDENTIFIERS> <IDENTIFIERS> <GETS> <INTEGER_LITERAL>\
+/* POSSIBLE MIGHT NOT NEED THE BELOW CONDITION BECAUSE IT WAS COVERED ELSEWHERE */\
+|	<IDENTIFIERS> <IDENTIFIERS> ((<LEFT_BRACKET><RIGHT_BRACKET>)*) <GETS> <NEW> <IDENTIFIERS> ((<LEFT_BRACKET>((<INTEGER_LITERAL>)?)<RIGHT_BRACKET>)*) <SEMICOLON>\
+/* Recursion needs to be done here to account for all the possible brackets */\
+/*|	type() <IDENTIFIERS> <LEFT_BRACE> (statement())* <RIGHT_BRACE> */\
+/* SEQUENTIAL STATEMENT BLOCKS */\
+|	<IDENTIFIERS> <IDENTIFIERS> <LEFT_BRACE> (statement())* <RIGHT_BRACE>\
+/*IF STATEMENTS */\
+|  ifstatements()\
+/* WHILE STATEMENTS */\
+|  whilestatement()\
+/* FOR STATEMENTS */\
+| <FOR> <LEFT_PARENTHESIS> initialization() <SEMICOLON> test() <SEMICOLON> increment() <RIGHT_PARENTHESIS> statement()\
+/* VOID FUNCTION CALL STATEMENTS */\
+|  functionname() <LEFT_PARENTHESIS> ((actualparameters())+) <RIGHT_PARENTHESIS>\
+/* FUNCTION CALL */\
+|	functioncall()\
+/* RETURN STATEMENT */\
+|  <RETURN> expression()\
+/* EMPTY STATEMENTS */\
+|  emptystatement()\
+\}\
+\
+\
+void functioncall() :\
+\{\}\
+\{\
+	functionname() <LEFT_PARENTHESIS> expressionlist() <RIGHT_PARENTHESIS>\
+\}\
+\
+void dowhilestatement() :\
+\{\}\
+\{\
+	<DO> statement() <WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> \
+\}\
+\
+void whilestatement() :\
+\{\}\
+\{\
+	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()\
+\}\
+\
+void emptystatement() :\
+\{\}\
+\{\
+	<SEMICOLON>\
+|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>\
+/* May not be necessary but added here anyways just to be sure */\
+|	<DO> <LEFT_BRACE> <RIGHT_BRACE> <WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>\
+|	<FOR> <LEFT_PARENTHESIS> initialization() <SEMICOLON> test() <SEMICOLON> increment() <RIGHT_PARENTHESIS> <SEMICOLON>\
+|	<IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <RIGHT_BRACE>\
+\}\
+\
+void ifstatements() :\
+\{\}\
+\{\
+	<IF> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() <ELSE> statement()\
+| <IF> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()\
+| <IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> statement() <ELSE> statement() <RIGHT_BRACE>\
+\}\
+\
+\
+void test() :\
+\{\}\
+\{\
+	 <IDENTIFIERS> <GETS> <IDENTIFIERS>\
+\}\
+\
+void actualparameters() :\
+\{\}\
+\{\
+	expression() <COMMA>\
+\}\
+\
+void functionname() :\
+\{\}\
+\{\
+	<IDENTIFIERS> \
+\}\
+\
+void initialization() :\
+\{\}\
+\{\
+	<IDENTIFIERS> \
+|	incrementstatement()\
+|	decrementstatement()\
+|	assignmentstatement()\
+|	emptystatement()\
+\}\
+\
+void increment() :\
+\{\}\
+\{\
+	<IDENTIFIERS> \
+|	incrementstatement()\
+|	decrementstatement()\
+|	assignmentstatement()\
+|	emptystatement()\
+\}\
+\
+void incrementstatement() :\
+\{\}\
+\{\
+	<IDENTIFIERS> <PLUSPLUS>\
+|	<IDENTIFIERS> <GETS> <IDENTIFIERS> <PLUS> <ONEVALUE>\
+\}\
+\
+void assignmentstatement() :\
+\{\}\
+\{\
+	<IDENTIFIERS> <GETS> expression() <SEMICOLON>\
+\}\
+\
+void decrementstatement() :\
+\{\}\
+\{\
+	<IDENTIFIERS> <MINUSMINUS>\
+|	<IDENTIFIERS> <GETS> <IDENTIFIERS> <MINUS> <ONEVALUE>\
+\}\
+\
+\
+\
+/* void type() : */\
+/* \{\} */\
+/* \{ */\
+/*	<BYTE> */\
+/*|	<SHORT> */\
+/*|	<INT>  */\
+/*|	<LONG> */\
+/*|	<FLOAT> */\
+/*|	<DOUBLE> */\
+/*|	<BOOLEAN> */\
+/*|	<CHAR> */\
+/* \} */\
+\
+void expression() :\
+\{\}\
+\{\
+	<TRUE>\
+|	<FALSE>\
+|	<INTEGER_LITERAL>\
+|	<IDENTIFIERS> <LEFT_BRACKET> <INTEGER_LITERAL> <RIGHT_BRACKET>\
+|	<IDENTIFIERS> <LEFT_BRACKET> <PLUS> <INTEGER_LITERAL> <RIGHT_BRACKET>\
+|	<IDENTIFIERS> <LEFT_BRACKET> <MINUS> <INTEGER_LITERAL> <RIGHT_BRACKET>\
+|	<IDENTIFIERS> <PERIOD> <IDENTIFIERS>\
+|	<INTEGER_LITERAL>\
+/*	NEW EXPRESSIONS */\
+|	<NEW> <IDENTIFIERS> <LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>\
+|	<NEW> <IDENTIFIERS> (<LEFT_BRACKET>((<INTEGER_LITERAL>)?)<RIGHT_BRACKET>)* <SEMICOLON>\
+/*	OPERATOR EXPRESSIONS */\
+|	operatorexpressionsvariablesornumbers()\
+\}\
+\
+void expressionlist() :\
+\{\}\
+\{\
+	expression()((<COMMA>)*)\
+\}\
+\
+void operatorexpressionsvariablesornumbers() :\
+\{\}\
+\{\
+	(<IDENTIFIERS>|<INTEGER_LITERAL>) <PLUS> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <MINUS> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <TIMES> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <DIVIDE> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <GREATER_THAN> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <LESS_THAN> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <LESS_THAN_OR_EQUAL_TO> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <GREATER_THAN_OR_EQUAL_TO> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <EQUAL> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) <NOT> <GETS> (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	(<IDENTIFIERS>|<INTEGER_LITERAL>) (<AND> | <OR>) (<IDENTIFIERS>|<INTEGER_LITERAL>)\
+|	mathstuff()\
+\}\
+\
+void mathstuff() :\
+\{\}\
+\{\
+	<IDENTIFIERS>\
+	\
+\}\
+\
+\
+\
+/* void optionale */\
+\
+}
