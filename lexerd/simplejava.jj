@@ -77,29 +77,13 @@ TOKEN :
 |	< IDENTIFIER: ["a"-"z"](["a"-"z","0"-"9"])*>
 }
 
-void program():
+void program() :
 {}
 {    
 	expression() <EOF>
 }
 
-void statement():
-{}
-{
-	//Sequential Statement Blocks
-	//Assignment Statements
-	//Increment Statements
-	//Variable Declaration Statements
-	//If Statements
-	//While Statements
-	//Do-While Statements
-	//For Statements
-	//Void Function Call Statements
-	//Return Statements
-	//Empty Statements
-}
-
-void expression():
+void expression() :
 {}
 {
 	<TRUE>
@@ -113,19 +97,19 @@ void expression():
 |	variable()
 }
 
-void variable():
+void variable() :
 {}
 {
 	<LEFT_BRACKET> followsbrackets()
 }
 
-void followsnew():
+void followsnew() :
 {}
 {
 	<IDENTIFIER> followsvariablenames()
 }
 
-void followsvariablenames():
+void followsvariablenames() :
 {}
 {
 	((<LEFT_BRACKET> followsbrackets())+) <SEMICOLON>
@@ -134,14 +118,14 @@ void followsvariablenames():
 |	arithimeticandlogic() 
 }
 
-void followsbrackets():
+void followsbrackets() :
 {}
 {
 	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithimeticandlogic())?) <RIGHT_BRACKET>
 |	<RIGHT_BRACKET> 
 }
 
-void arithimeticandlogic():
+void arithimeticandlogic() :
 {}
 {
 	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
@@ -157,13 +141,13 @@ void arithimeticandlogic():
 /*|	(<AND> | <OR>) (<IDENTIFIER>|<INTEGER_LITERAL>) */
 }
 
-void operatorexpressionsvariables():
+void operatorexpressionsvariables() :
 {}
 {
 	mathstuff()
 }
 
-void mathstuff():
+void mathstuff() :
 {}
 {
 	<IDENTIFIER>
