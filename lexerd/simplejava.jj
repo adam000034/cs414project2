@@ -1,0 +1,162 @@
+options {
+  IGNORE_CASE=false;
+}
+
+PARSER_BEGIN(simplejava)
+
+public class simplejava {
+}
+
+PARSER_END(simplejava)
+
+TOKEN_MGR_DECLS : 
+{
+	public static int nesting = 0;
+}
+
+SKIP : 
+{
+    	< " " >
+|    	< "\\t">
+|    	< "\t">
+|		< "EOF">
+|		< "\n">
+}
+
+SKIP:
+{
+	"/*" {nesting++; System.out.println("Starting Comment");}: WithinComment
+}
+
+<WithinComment> SKIP:
+{
+	"/*" {nesting++;}
+	| "*/" {nesting--;
+		if(nesting == 0) {
+			SwitchTo(DEFAULT);
+		}
+	}
+	| <~[]>
+}
+
+SKIP :
+{
+	<"//" (~["\n"])* "\n">
+}
+
+TOKEN : 
+{
+	< ELSE: "else">
+|	< FOR: "for">
+|	< IF: "if">
+|	< WHILE: "while">
+|	< DO: "do">
+|	< CLASS: "class">
+|	< TRUE: "true">
+|	< FALSE: "false">
+|	< RETURN: "return">
+|	< NEW: "new">
+}
+
+TOKEN : 
+{
+	< PLUS: "+" >
+|	< SEMICOLON: ";">
+|	< MINUS: "-">
+|	< TIMES: "*">
+|	< DIVIDE: "/">
+|	< EQUAL: "==">
+|	< GREATER_THAN: ">">
+|	< NOT: "!">
+|	< LEFT_BRACE: "{">
+|	< LEFT_BRACKET: "[">
+|	< RIGHT_BRACKET: "]">
+|	< PERIOD: ".">
+|	< COMMA: ",">
+|	< GREATER_THAN_OR_EQUAL_TO: ">=">
+|	< AND: "&&">
+|	< RIGHT_BRACE: "}">
+|	< LEFT_PARENTHESIS: "(">
+|	< RIGHT_PARENTHESIS: ")">
+|	< NOT_EQUAL: "!=">
+|	< LESS_THAN_OR_EQUAL_TO: "<=">
+|	< LESS_THAN: "<">
+|	< GETS: "=">
+|	< OR: "||">
+|	< ADD: "++">
+|   < INTEGER_LITERAL: (["0"-"9"])*>
+|	< IDENTIFIERS: ["A"-"Z","a"-"z","_"]((["A"-"Z","a"-"z","0"-"9","_"])*)>
+}
+
+void expression() :
+{}
+{
+	<TRUE>
+|	<FALSE>
+|	<INTEGER_LITERAL>
+|	<IDENTIFIERS> followsvariablenames()
+/*	NEW EXPRESSIONS */
+|	<NEW> followsnew()
+/*	OPERATOR EXPRESSIONS */
+/*|	operatorexpressionsvariablesornumbers() */
+|	variable()
+}
+
+void variable() :
+{}
+{
+	<LEFT_BRACKET> followsbrackets()
+}
+
+void followsnew() :
+{}
+{
+	<IDENTIFIERS> followsvariablenames()
+}
+
+void followsvariablenames() :
+{}
+{
+	<LEFT_BRACKET> followsbrackets()
+|	<PERIOD> <IDENTIFIERS>
+|	<LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>
+|	arithimeticandlogic() 
+}
+
+void followsbrackets() :
+{}
+{
+	(<INTEGER_LITERAL>|<IDENTIFIERS>) ((arithimeticandlogic())?) <RIGHT_BRACKET> ((<SEMICOLON>)?)
+|	<RIGHT_BRACKET> ((<SEMICOLON>)?)
+}
+
+void arithimeticandlogic() :
+{}
+{
+	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIERS>)
+|	<MINUS> (<INTEGER_LITERAL>|<IDENTIFIERS>)
+|	<DIVIDE> (<INTEGER_LITERAL>|<IDENTIFIERS>)
+|	<TIMES> (<INTEGER_LITERAL>|<IDENTIFIERS>)
+|	<GREATER_THAN> (<IDENTIFIERS>|<INTEGER_LITERAL>)
+|	<LESS_THAN> (<IDENTIFIERS>|<INTEGER_LITERAL>)
+|	<LESS_THAN_OR_EQUAL_TO> (<IDENTIFIERS>|<INTEGER_LITERAL>)
+|	<GREATER_THAN_OR_EQUAL_TO> (<IDENTIFIERS>|<INTEGER_LITERAL>)
+|	<EQUAL> (<IDENTIFIERS>|<INTEGER_LITERAL>)
+|	<NOT> <GETS> (<IDENTIFIERS>|<INTEGER_LITERAL>)
+/*|	(<AND> | <OR>) (<IDENTIFIERS>|<INTEGER_LITERAL>) */
+}
+
+void operatorexpressionsvariables() :
+{}
+{
+	mathstuff()
+}
+
+void mathstuff() :
+{}
+{
+	<IDENTIFIERS>
+	
+}
+
+
