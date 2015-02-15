@@ -127,18 +127,17 @@ void statement() :
 |	incrementstatement()
 |	decrementstatement()
 /* VARIABLE DECLARATION */
-|	<IDENTIFIERS> <IDENTIFIERS>
 /*|	type() <IDENTIFIERS> */
 /*|	type() <IDENTIFIERS> <GETS> <IDENTIFIERS> */
-|	<IDENTIFIERS> <IDENTIFIERS> <GETS> <IDENTIFIERS>
+|	<IDENTIFIERS> <IDENTIFIERS> <GETS> (<IDENTIFIERS> | <INTEGER_LITERAL>)
+|	<IDENTIFIERS> <IDENTIFIERS>
 /*|type() <IDENTIFIERS> <GETS> <INTEGER_LITERAL> */
-|	<IDENTIFIERS> <IDENTIFIERS> <GETS> <INTEGER_LITERAL>
 /* POSSIBLE MIGHT NOT NEED THE BELOW CONDITION BECAUSE IT WAS COVERED ELSEWHERE */
 |	<IDENTIFIERS> <IDENTIFIERS> ((<LEFT_BRACKET><RIGHT_BRACKET>)*) <GETS> <NEW> <IDENTIFIERS> ((<LEFT_BRACKET>((<INTEGER_LITERAL>)?)<RIGHT_BRACKET>)*) <SEMICOLON>
 /* Recursion needs to be done here to account for all the possible brackets */
 /*|	type() <IDENTIFIERS> <LEFT_BRACE> (statement())* <RIGHT_BRACE> */
 /* SEQUENTIAL STATEMENT BLOCKS */
-|	<IDENTIFIERS> <IDENTIFIERS> <LEFT_BRACE> (statement())* <RIGHT_BRACE>
+|	<LEFT_BRACE> (statement())* <RIGHT_BRACE>
 /*IF STATEMENTS */
 |  ifstatements()
 /* WHILE STATEMENTS */
@@ -188,9 +187,8 @@ void emptystatement() :
 void ifstatements() :
 {}
 {
-	<IF> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() <ELSE> statement()
-| <IF> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
-| <IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> statement() <ELSE> statement() <RIGHT_BRACE>
+	<IF> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() ((<ELSE> statement())?)
+|	<IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> statement() <ELSE> statement() <RIGHT_BRACE>
 }
 
 
@@ -215,21 +213,21 @@ void functionname() :
 void initialization() :
 {}
 {
-	<IDENTIFIERS> 
-|	incrementstatement()
+	incrementstatement()
 |	decrementstatement()
 |	assignmentstatement()
 |	emptystatement()
+|	<IDENTIFIERS> 
 }
 
 void increment() :
 {}
 {
-	<IDENTIFIERS> 
-|	incrementstatement()
+	incrementstatement()
 |	decrementstatement()
 |	assignmentstatement()
 |	emptystatement()
+|	<IDENTIFIERS> 
 }
 
 void incrementstatement() :
