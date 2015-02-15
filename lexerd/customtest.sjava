@@ -1,9 +1,10 @@
+abe [abe + 3]
 true
 false
 0
 abe [];
 abe [3];
-abe [abe + 3]
+abe [3][][
 abe [1+3]
 abe []
 abe.abe

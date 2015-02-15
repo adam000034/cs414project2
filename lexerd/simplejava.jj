@@ -117,7 +117,7 @@ void followsnew() :
 void followsvariablenames() :
 {}
 {
-	<LEFT_BRACKET> followsbrackets()
+	<LEFT_BRACKET> followsbrackets() ((<LEFT_BRACKET> followsbrackets())*) <SEMICOLON>
 |	<PERIOD> <IDENTIFIERS>
 |	<LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>
 |	arithimeticandlogic() 
@@ -126,8 +126,8 @@ void followsvariablenames() :
 void followsbrackets() :
 {}
 {
-	(<INTEGER_LITERAL>|<IDENTIFIERS>) ((arithimeticandlogic())?) <RIGHT_BRACKET> ((<SEMICOLON>)?)
-|	<RIGHT_BRACKET> ((<SEMICOLON>)?)
+	(<INTEGER_LITERAL>|<IDENTIFIERS>) ((arithimeticandlogic())?) <RIGHT_BRACKET> 
+|	<RIGHT_BRACKET> 
 }
 
 void arithimeticandlogic() :
