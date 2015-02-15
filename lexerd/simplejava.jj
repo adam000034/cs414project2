@@ -1,5 +1,5 @@
 options {
-  IGNORE_CASE=false;
+  IGNORE_CASE=true;
 }
 
 PARSER_BEGIN(simplejava)
@@ -11,7 +11,7 @@ PARSER_END(simplejava)
 
 TOKEN_MGR_DECLS : 
 {
-	public static int nesting = 0;
+	public static int nestedcomments = 0;
 }
 
 SKIP : 
@@ -19,29 +19,18 @@ SKIP :
     	< " " >
 |    	< "\\t">
 |    	< "\t">
-|		< "EOF">
-|		< "\n">
+|	< "EOF">
+|	< "\n">
+|	< "/*" > { nestedcomments++; SwitchTo(IN_COMMENT);}
+|	< "//" (~["\n"])* "\n" >
 }
 
-SKIP:
-{
-	"/*" {nesting++; System.out.println("Starting Comment");}: WithinComment
-}
-
-<WithinComment> SKIP:
-{
-	"/*" {nesting++;}
-	| "*/" {nesting--;
-		if(nesting == 0) {
-			SwitchTo(DEFAULT);
-		}
-	}
-	| <~[]>
-}
-
+<IN_COMMENT>
 SKIP :
 {
-	<"//" (~["\n"])* "\n">
+	< "*/" > { nestedcomments--; if (nestedcomments == 0) SwitchTo(DEFAULT);}
+|	< "/*" > { nestedcomments++; }
+|	< ~[] >
 }
 
 TOKEN : 
@@ -84,79 +73,98 @@ TOKEN :
 |	< GETS: "=">
 |	< OR: "||">
 |	< ADD: "++">
-|   < INTEGER_LITERAL: (["0"-"9"])*>
-|	< IDENTIFIERS: ["A"-"Z","a"-"z","_"]((["A"-"Z","a"-"z","0"-"9","_"])*)>
+|   	< INTEGER_LITERAL: (["0"-"9"])+>
+|	< IDENTIFIER: ["a"-"z"](["a"-"z","0"-"9"])*>
 }
 
-void expression() :
+void program():
+{}
+{    
+	expression() <EOF>
+}
+
+void statement():
+{}
+{
+	//Sequential Statement Blocks
+	//Assignment Statements
+	//Increment Statements
+	//Variable Declaration Statements
+	//If Statements
+	//While Statements
+	//Do-While Statements
+	//For Statements
+	//Void Function Call Statements
+	//Return Statements
+	//Empty Statements
+}
+
+void expression():
 {}
 {
 	<TRUE>
 |	<FALSE>
 |	<INTEGER_LITERAL>
-|	<IDENTIFIERS> followsvariablenames()
-/*	NEW EXPRESSIONS */
+|	<IDENTIFIER> followsvariablenames()
+/* NEW EXPRESSIONS */
 |	<NEW> followsnew()
-/*	OPERATOR EXPRESSIONS */
+/* OPERATOR EXPRESSIONS */
 /*|	operatorexpressionsvariablesornumbers() */
 |	variable()
 }
 
-void variable() :
+void variable():
 {}
 {
 	<LEFT_BRACKET> followsbrackets()
 }
 
-void followsnew() :
+void followsnew():
 {}
 {
-	<IDENTIFIERS> followsvariablenames()
+	<IDENTIFIER> followsvariablenames()
 }
 
-void followsvariablenames() :
+void followsvariablenames():
 {}
 {
-	<LEFT_BRACKET> followsbrackets() ((<LEFT_BRACKET> followsbrackets())*) <SEMICOLON>
-|	<PERIOD> <IDENTIFIERS>
+	((<LEFT_BRACKET> followsbrackets())+) <SEMICOLON>
+|	<PERIOD> <IDENTIFIER>
 |	<LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>
 |	arithimeticandlogic() 
 }
 
-void followsbrackets() :
+void followsbrackets():
 {}
 {
-	(<INTEGER_LITERAL>|<IDENTIFIERS>) ((arithimeticandlogic())?) <RIGHT_BRACKET> 
+	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithimeticandlogic())?) <RIGHT_BRACKET>
 |	<RIGHT_BRACKET> 
 }
 
-void arithimeticandlogic() :
+void arithimeticandlogic():
 {}
 {
-	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIERS>)
-|	<MINUS> (<INTEGER_LITERAL>|<IDENTIFIERS>)
-|	<DIVIDE> (<INTEGER_LITERAL>|<IDENTIFIERS>)
-|	<TIMES> (<INTEGER_LITERAL>|<IDENTIFIERS>)
-|	<GREATER_THAN> (<IDENTIFIERS>|<INTEGER_LITERAL>)
-|	<LESS_THAN> (<IDENTIFIERS>|<INTEGER_LITERAL>)
-|	<LESS_THAN_OR_EQUAL_TO> (<IDENTIFIERS>|<INTEGER_LITERAL>)
-|	<GREATER_THAN_OR_EQUAL_TO> (<IDENTIFIERS>|<INTEGER_LITERAL>)
-|	<EQUAL> (<IDENTIFIERS>|<INTEGER_LITERAL>)
-|	<NOT> <GETS> (<IDENTIFIERS>|<INTEGER_LITERAL>)
-/*|	(<AND> | <OR>) (<IDENTIFIERS>|<INTEGER_LITERAL>) */
+	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<MINUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<DIVIDE> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<TIMES> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<GREATER_THAN> (<IDENTIFIER>|<INTEGER_LITERAL>)
+|	<LESS_THAN> (<IDENTIFIER>|<INTEGER_LITERAL>)
+|	<LESS_THAN_OR_EQUAL_TO> (<IDENTIFIER>|<INTEGER_LITERAL>)
+|	<GREATER_THAN_OR_EQUAL_TO> (<IDENTIFIER>|<INTEGER_LITERAL>)
+|	<EQUAL> (<IDENTIFIER>|<INTEGER_LITERAL>)
+|	<NOT> <GETS> (<IDENTIFIER>|<INTEGER_LITERAL>)
+/*|	(<AND> | <OR>) (<IDENTIFIER>|<INTEGER_LITERAL>) */
 }
 
-void operatorexpressionsvariables() :
+void operatorexpressionsvariables():
 {}
 {
 	mathstuff()
 }
 
-void mathstuff() :
+void mathstuff():
 {}
 {
-	<IDENTIFIERS>
-	
+	<IDENTIFIER>
 }
-
-
