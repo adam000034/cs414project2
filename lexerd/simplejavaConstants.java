@@ -77,14 +77,18 @@ public interface simplejavaConstants {
   /** RegularExpression Id. */
   int ADD = 44;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 45;
+  int MINUSMINUS = 45;
   /** RegularExpression Id. */
-  int IDENTIFIERS = 46;
+  int ONEVALUE = 46;
+  /** RegularExpression Id. */
+  int INTEGER_LITERAL = 47;
+  /** RegularExpression Id. */
+  int IDENTIFIER = 48;
 
   /** Lexical state. */
   int DEFAULT = 0;
   /** Lexical state. */
-  int WithinComment = 1;
+  int IN_COMMENT = 1;
 
   /** Literal token values. */
   String[] tokenImage = {
@@ -95,9 +99,9 @@ public interface simplejavaConstants {
     "\"EOF\"",
     "\"\\n\"",
     "\"/*\"",
-    "\"/*\"",
+    "<token of kind 7>",
     "\"*/\"",
-    "<token of kind 9>",
+    "\"/*\"",
     "<token of kind 10>",
     "\"else\"",
     "\"for\"",
@@ -133,8 +137,10 @@ public interface simplejavaConstants {
     "\"=\"",
     "\"||\"",
     "\"++\"",
+    "\"--\"",
+    "\"1\"",
     "<INTEGER_LITERAL>",
-    "<IDENTIFIERS>",
+    "<IDENTIFIER>",
   };
 
 }

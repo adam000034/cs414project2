@@ -73,6 +73,8 @@ TOKEN :
 |	< GETS: "=">
 |	< OR: "||">
 |	< ADD: "++">
+|	< MINUSMINUS: "--">
+|	< ONEVALUE: "1">
 |   	< INTEGER_LITERAL: (["0"-"9"])+>
 |	< IDENTIFIER: ["a"-"z"](["a"-"z","0"-"9"])*>
 }
@@ -83,6 +85,20 @@ void program() :
 	expression() <EOF>
 }
 
+void statement() :
+{}
+{
+	dowhilestatement()
+|	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
+|	
+}
+
+void dowhilestatement() :
+{}
+{
+	<DO> statement() <WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> 
+}
+
 void expression() :
 {}
 {
@@ -90,11 +106,25 @@ void expression() :
 |	<FALSE>
 |	<INTEGER_LITERAL>
 |	<IDENTIFIER> followsvariablenames()
-/* NEW EXPRESSIONS */
-|	<NEW> followsnew()
-/* OPERATOR EXPRESSIONS */
+/*	NEW EXPRESSIONS */
+|	<NEW> <IDENTIFIER> followsnew()
+/*	OPERATOR EXPRESSIONS */
 /*|	operatorexpressionsvariablesornumbers() */
 |	variable()
+}
+
+void incrementstatement() :
+{}
+{
+	<ADD>
+|	<PLUS> <ONEVALUE>
+}
+
+void decrementstatement() :
+{}
+{
+	<MINUSMINUS>
+|	<MINUS> <ONEVALUE>
 }
 
 void variable() :
@@ -103,25 +133,46 @@ void variable() :
 	<LEFT_BRACKET> followsbrackets()
 }
 
+void expressionlist() :
+{}
+{
+	((expression()((<COMMA>)))*)expression()
+}
+
+void statementlist() :
+{}
+{
+	(((statement()<SEMICOLON>))*)statement()<SEMICOLON>
+}
+
 void followsnew() :
 {}
 {
-	<IDENTIFIER> followsvariablenames()
+	<LEFT_BRACKET> followsbrackets() <SEMICOLON>
+|	<LEFT_PARENTHESIS><RIGHT_PARENTHESIS>
+}
+
+void assignmentstatement() :
+{}
+{
+	((<SEMICOLON>)*)
 }
 
 void followsvariablenames() :
 {}
 {
-	((<LEFT_BRACKET> followsbrackets())+) <SEMICOLON>
-|	<PERIOD> <IDENTIFIER>
-|	<LEFT_PARENTHESIS> <RIGHT_PARENTHESIS>
+	/* How to prevent from class types from getting the same rules as variables*/
+	<IDENTIFIER> (<SEMICOLON> | (((<LEFT_BRACKET> followsbrackets())+))((<SEMICOLON>)?))	
+|	((<PERIOD> <IDENTIFIER>)+)
+|	<LEFT_PARENTHESIS> ((expressionlist())*) <RIGHT_PARENTHESIS>
 |	arithimeticandlogic() 
+|	<GETS> <IDENTIFIER> (assignmentstatement() | incrementstatement() | decrementstatement())	
 }
 
 void followsbrackets() :
 {}
 {
-	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithimeticandlogic())?) <RIGHT_BRACKET>
+	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithimeticandlogic())?) <RIGHT_BRACKET> 
 |	<RIGHT_BRACKET> 
 }
 
