@@ -1,4 +1,10 @@
+int add(int x, int y);
+boolean not(boolean x);
+void printBoard(int board[][]);
 
+class abe { int x; myclass y; int array[]; boolean twodarray[][]; }
+
+y =abe-b;
 
 void foo() { }
 int y = 3;
@@ -11,9 +17,8 @@ int B[] = new int[5];
 int C[][][] = new int[10][][];
 
 /* NOT PASSING */
-y =abe++;
 
-
+/*-----*/
 if (x= false){ b = false; } else { b = true; }
 true
 false

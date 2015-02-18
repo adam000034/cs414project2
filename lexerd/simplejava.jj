@@ -16,9 +16,9 @@ TOKEN_MGR_DECLS :
 
 SKIP : 
 {
-    	< " " >
-|    	< "\\t">
-|    	< "\t">
+  	< " " >
+|   < "\\t">
+|   < "\t">
 |	< "EOF">
 |	< "\n">
 |	< "/*" > { nestedcomments++; SwitchTo(IN_COMMENT);}
@@ -82,8 +82,34 @@ TOKEN :
 void program() :
 {}
 {    
-	(statement()*) <EOF>  
+/*perhaps put a star there to check multiple statements */
+	(statement()) <EOF>  
 //	expression() <EOF>
+}
+
+void functionprototypes() :
+{}
+{
+	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> formalparameterlist() <RIGHT_PARENTHESIS>
+}
+
+void formalparameterlist() :
+{}
+{
+	((formalparameter() <COMMA>)?)(((formalparameter())<COMMA>)*)(formalparameter())
+}
+
+void formalparameter() :
+{}
+{
+	variabledeclarations()
+}
+
+void classdefinitions() :
+{}
+{
+	/* Get value of identifier so that identifier will not show up in the body */
+	<CLASS> <IDENTIFIER> <LEFT_BRACE> variabledefinitions() <RIGHT_BRACE>
 }
 
 void statement() :
@@ -176,6 +202,20 @@ void incrementstatements() :
 	incrementstatement()
 |	decrementstatement()
 }
+
+void variabledeclarations() :
+{}
+{	
+	<IDENTIFIER> (((followsvariablenames())*) | (<LEFT_BRACKET> followsbrackets())+) 	
+}
+
+void variabledefinitions() :
+{}
+{
+	(((variabledeclarations())<SEMICOLON>)*)
+}
+
+
 
 void variable() :
 {}

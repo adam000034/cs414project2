@@ -14,7 +14,7 @@ public class ParseTest {
 	    return;
 	} 
 	try {
-	    parser.statement();
+	    parser.functionprototypes();
 	    System.out.println("Parsing Successful");
 	} catch (ParseException e) {
 	    System.out.println(e.getMessage());
