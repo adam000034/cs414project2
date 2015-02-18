@@ -1,0 +1,17 @@
+int C[][][] = new int[10][][];
+int B[] = new int[5];
+int A[];
+myclclass z = new myclass();
+myclass w;
+boolean x = y < 2;
+int y = 3;
+
+
+ALL PASSING, HAVE TRIED TO BREAK SOME AND STILL PASSED
+MUTIPLY SEMICOLONS STILL PASS BECAUSE OF FIRST LINE, FIRST SET PROBLEM MENTIONED EARLIER
+
+
+
+
+
+

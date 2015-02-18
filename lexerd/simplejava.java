@@ -8,21 +8,174 @@ public class simplejava implements simplejavaConstants {
   }
 
   static final public void statement() throws ParseException {
-    jj_consume_token(LEFT_BRACE);
-    label_1:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case LEFT_BRACE:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[0] = jj_gen;
-        break label_1;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case DO:{
+      dowhilestatement();
+      break;
       }
-      statement();
+    case IF:{
+      jj_consume_token(IF);
+      ifstatement();
+      break;
+      }
+    case FOR:{
+      forstatement();
+      break;
+      }
+    case LEFT_BRACE:{
+      jj_consume_token(LEFT_BRACE);
+      label_1:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case FOR:
+        case IF:
+        case DO:
+        case LEFT_BRACE:
+        case IDENTIFIER:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[0] = jj_gen;
+          break label_1;
+        }
+        statement();
+      }
+      jj_consume_token(RIGHT_BRACE);
+      break;
+      }
+    case IDENTIFIER:{
+      jj_consume_token(IDENTIFIER);
+      followsvariablenames();
+      jj_consume_token(SEMICOLON);
+      break;
+      }
+    default:
+      jj_la1[1] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
-    jj_consume_token(RIGHT_BRACE);
+  }
+
+  static final public void ifstatement() throws ParseException {
+    jj_consume_token(LEFT_PARENTHESIS);
+    test();
+    jj_consume_token(RIGHT_PARENTHESIS);
+    statement();
+    jj_consume_token(ELSE);
+    statement();
+  }
+
+  static final public void emptystatement() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case SEMICOLON:{
+      jj_consume_token(SEMICOLON);
+      break;
+      }
+    case WHILE:{
+      jj_consume_token(WHILE);
+      jj_consume_token(LEFT_PARENTHESIS);
+      test();
+      jj_consume_token(RIGHT_PARENTHESIS);
+      jj_consume_token(SEMICOLON);
+      break;
+      }
+    case DO:{
+      jj_consume_token(DO);
+      jj_consume_token(LEFT_BRACE);
+      jj_consume_token(RIGHT_BRACE);
+      jj_consume_token(WHILE);
+      jj_consume_token(LEFT_PARENTHESIS);
+      test();
+      jj_consume_token(RIGHT_PARENTHESIS);
+      jj_consume_token(SEMICOLON);
+      break;
+      }
+    case FOR:{
+      jj_consume_token(FOR);
+      jj_consume_token(LEFT_PARENTHESIS);
+      initialization();
+      jj_consume_token(SEMICOLON);
+      test();
+      jj_consume_token(SEMICOLON);
+      initialization();
+      jj_consume_token(RIGHT_PARENTHESIS);
+      jj_consume_token(SEMICOLON);
+      break;
+      }
+    case IF:{
+      jj_consume_token(IF);
+      jj_consume_token(LEFT_PARENTHESIS);
+      expression();
+      jj_consume_token(RIGHT_PARENTHESIS);
+      jj_consume_token(LEFT_BRACE);
+      jj_consume_token(RIGHT_BRACE);
+      break;
+      }
+    default:
+      jj_la1[2] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  static final public void initialization() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case IDENTIFIER:{
+      jj_consume_token(IDENTIFIER);
+      break;
+      }
+    case ADD:{
+      incrementstatement();
+      break;
+      }
+    case MINUSMINUS:{
+      decrementstatement();
+      break;
+      }
+    case GETS:{
+      assignmentstatement();
+      break;
+      }
+    case FOR:
+    case IF:
+    case WHILE:
+    case DO:
+    case SEMICOLON:{
+      emptystatement();
+      break;
+      }
+    default:
+      jj_la1[3] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+  }
+
+  static final public void forstatement() throws ParseException {
+    jj_consume_token(FOR);
+    jj_consume_token(LEFT_PARENTHESIS);
+    initialization();
+    jj_consume_token(SEMICOLON);
+    test();
+    jj_consume_token(SEMICOLON);
+    initialization();
+    jj_consume_token(RIGHT_PARENTHESIS);
+    statement();
+  }
+
+  static final public void test() throws ParseException {
+    jj_consume_token(IDENTIFIER);
+    followsvariablenames();
+  }
+
+  static final public void dowhilestatement() throws ParseException {
+    jj_consume_token(DO);
+    statement();
+    jj_consume_token(WHILE);
+    jj_consume_token(LEFT_PARENTHESIS);
+    expression();
+    jj_consume_token(RIGHT_PARENTHESIS);
   }
 
   static final public void expression() throws ParseException {
@@ -37,17 +190,41 @@ public class simplejava implements simplejavaConstants {
       }
     case INTEGER_LITERAL:{
       jj_consume_token(INTEGER_LITERAL);
+      label_2:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case PLUS:
+        case MINUS:
+        case TIMES:
+        case DIVIDE:
+        case EQUAL:
+        case GREATER_THAN:
+        case GREATER_THAN_OR_EQUAL_TO:
+        case NOT_EQUAL:
+        case LESS_THAN_OR_EQUAL_TO:
+        case LESS_THAN:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[4] = jj_gen;
+          break label_2;
+        }
+        arithimiticandlogic();
+      }
       break;
       }
     case IDENTIFIER:{
       jj_consume_token(IDENTIFIER);
       followsvariablenames();
+      jj_consume_token(SEMICOLON);
       break;
       }
     case NEW:{
       jj_consume_token(NEW);
       jj_consume_token(IDENTIFIER);
-      followsnew();
+      followsnewandidentifier();
+      jj_consume_token(SEMICOLON);
       break;
       }
     case LEFT_BRACKET:{
@@ -55,43 +232,32 @@ public class simplejava implements simplejavaConstants {
       break;
       }
     default:
-      jj_la1[1] = jj_gen;
+      jj_la1[5] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
   static final public void incrementstatement() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case ADD:{
-      jj_consume_token(ADD);
-      break;
-      }
-    case PLUS:{
-      jj_consume_token(PLUS);
-      jj_consume_token(ONEVALUE);
-      break;
-      }
-    default:
-      jj_la1[2] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
+    jj_consume_token(ADD);
   }
 
   static final public void decrementstatement() throws ParseException {
+    jj_consume_token(MINUSMINUS);
+  }
+
+  static final public void incrementstatements() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-    case MINUSMINUS:{
-      jj_consume_token(MINUSMINUS);
+    case ADD:{
+      incrementstatement();
       break;
       }
-    case MINUS:{
-      jj_consume_token(MINUS);
-      jj_consume_token(ONEVALUE);
+    case MINUSMINUS:{
+      decrementstatement();
       break;
       }
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[6] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -103,7 +269,7 @@ public class simplejava implements simplejavaConstants {
   }
 
   static final public void expressionlist() throws ParseException {
-    label_2:
+    label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case TRUE:
@@ -116,8 +282,8 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[4] = jj_gen;
-        break label_2;
+        jj_la1[7] = jj_gen;
+        break label_3;
       }
       expression();
       jj_consume_token(COMMA);
@@ -126,16 +292,20 @@ public class simplejava implements simplejavaConstants {
   }
 
   static final public void statementlist() throws ParseException {
-    label_3:
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case LEFT_BRACE:{
+      case FOR:
+      case IF:
+      case DO:
+      case LEFT_BRACE:
+      case IDENTIFIER:{
         ;
         break;
         }
       default:
-        jj_la1[5] = jj_gen;
-        break label_3;
+        jj_la1[8] = jj_gen;
+        break label_4;
       }
       statement();
       jj_consume_token(SEMICOLON);
@@ -144,7 +314,7 @@ public class simplejava implements simplejavaConstants {
     jj_consume_token(SEMICOLON);
   }
 
-  static final public void followsnew() throws ParseException {
+  static final public void followsnewandidentifier() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case LEFT_BRACKET:{
       jj_consume_token(LEFT_BRACKET);
@@ -157,25 +327,42 @@ public class simplejava implements simplejavaConstants {
       break;
       }
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
   static final public void assignmentstatement() throws ParseException {
-    label_4:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case SEMICOLON:{
-        ;
-        break;
-        }
-      default:
-        jj_la1[7] = jj_gen;
-        break label_4;
+    jj_consume_token(GETS);
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case IDENTIFIER:{
+      jj_consume_token(IDENTIFIER);
+      followsvariablenames();
+      break;
       }
-      jj_consume_token(SEMICOLON);
+    case INTEGER_LITERAL:{
+      jj_consume_token(INTEGER_LITERAL);
+      break;
+      }
+    case NEW:{
+      jj_consume_token(NEW);
+      jj_consume_token(IDENTIFIER);
+      followsnewandidentifier();
+      break;
+      }
+    case TRUE:{
+      jj_consume_token(TRUE);
+      break;
+      }
+    case FALSE:{
+      jj_consume_token(FALSE);
+      break;
+      }
+    default:
+      jj_la1[10] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
     }
   }
 
@@ -183,32 +370,34 @@ public class simplejava implements simplejavaConstants {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case IDENTIFIER:{
       jj_consume_token(IDENTIFIER);
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case SEMICOLON:{
-        jj_consume_token(SEMICOLON);
-        break;
-        }
-      case LEFT_BRACKET:{
-        label_5:
-        while (true) {
-          jj_consume_token(LEFT_BRACKET);
-          followsbrackets();
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case LEFT_BRACKET:{
-            ;
-            break;
-            }
-          default:
-            jj_la1[8] = jj_gen;
-            break label_5;
+      label_5:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case PLUS:
+        case MINUS:
+        case TIMES:
+        case DIVIDE:
+        case EQUAL:
+        case GREATER_THAN:
+        case LEFT_BRACKET:
+        case PERIOD:
+        case GREATER_THAN_OR_EQUAL_TO:
+        case LEFT_PARENTHESIS:
+        case NOT_EQUAL:
+        case LESS_THAN_OR_EQUAL_TO:
+        case LESS_THAN:
+        case GETS:
+        case ADD:
+        case MINUSMINUS:
+        case IDENTIFIER:{
+          ;
+          break;
           }
+        default:
+          jj_la1[11] = jj_gen;
+          break label_5;
         }
-        break;
-        }
-      default:
-        jj_la1[9] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
+        followsvariablenames();
       }
       break;
       }
@@ -223,7 +412,7 @@ public class simplejava implements simplejavaConstants {
           break;
           }
         default:
-          jj_la1[10] = jj_gen;
+          jj_la1[12] = jj_gen;
           break label_6;
         }
       }
@@ -244,7 +433,7 @@ public class simplejava implements simplejavaConstants {
           break;
           }
         default:
-          jj_la1[11] = jj_gen;
+          jj_la1[13] = jj_gen;
           break label_7;
         }
         expressionlist();
@@ -258,23 +447,72 @@ public class simplejava implements simplejavaConstants {
     case DIVIDE:
     case EQUAL:
     case GREATER_THAN:
-    case NOT:
     case GREATER_THAN_OR_EQUAL_TO:
+    case NOT_EQUAL:
     case LESS_THAN_OR_EQUAL_TO:
     case LESS_THAN:{
-      arithimeticandlogic();
+      arithimiticandlogic();
       break;
       }
     case GETS:{
-      jj_consume_token(GETS);
-      jj_consume_token(IDENTIFIER);
       assignmentstatement();
       break;
       }
+    case ADD:
+    case MINUSMINUS:{
+      incrementstatements();
+      break;
+      }
+    case LEFT_BRACKET:{
+      variabledeclarionstatemementsbrackets();
+      break;
+      }
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
+    }
+  }
+
+  static final public void variabledeclarionstatemementsbrackets() throws ParseException {
+    label_8:
+    while (true) {
+      jj_consume_token(LEFT_BRACKET);
+      followsbrackets();
+      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+      case LEFT_BRACKET:{
+        ;
+        break;
+        }
+      default:
+        jj_la1[15] = jj_gen;
+        break label_8;
+      }
+    }
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case GETS:{
+      jj_consume_token(GETS);
+      jj_consume_token(NEW);
+      jj_consume_token(IDENTIFIER);
+      label_9:
+      while (true) {
+        jj_consume_token(LEFT_BRACKET);
+        followsbrackets();
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case LEFT_BRACKET:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[16] = jj_gen;
+          break label_9;
+        }
+      }
+      break;
+      }
+    default:
+      jj_la1[17] = jj_gen;
+      ;
     }
   }
 
@@ -292,7 +530,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[13] = jj_gen;
+        jj_la1[18] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -303,50 +541,32 @@ public class simplejava implements simplejavaConstants {
       case DIVIDE:
       case EQUAL:
       case GREATER_THAN:
-      case NOT:
       case GREATER_THAN_OR_EQUAL_TO:
+      case NOT_EQUAL:
       case LESS_THAN_OR_EQUAL_TO:
       case LESS_THAN:{
-        arithimeticandlogic();
+        arithimiticandlogic();
         break;
         }
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[19] = jj_gen;
         ;
       }
       jj_consume_token(RIGHT_BRACKET);
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case SEMICOLON:{
-        jj_consume_token(SEMICOLON);
-        break;
-        }
-      default:
-        jj_la1[15] = jj_gen;
-        ;
-      }
       break;
       }
     case RIGHT_BRACKET:{
       jj_consume_token(RIGHT_BRACKET);
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case SEMICOLON:{
-        jj_consume_token(SEMICOLON);
-        break;
-        }
-      default:
-        jj_la1[16] = jj_gen;
-        ;
-      }
       break;
       }
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
-  static final public void arithimeticandlogic() throws ParseException {
+  static final public void arithimiticandlogic() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case PLUS:{
       jj_consume_token(PLUS);
@@ -360,7 +580,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[21] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -378,7 +598,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[19] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -396,7 +616,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[23] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -414,7 +634,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -432,7 +652,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[25] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -450,7 +670,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[26] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -468,7 +688,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[27] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -486,7 +706,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[28] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -504,15 +724,14 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[26] = jj_gen;
+        jj_la1[29] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
-    case NOT:{
-      jj_consume_token(NOT);
-      jj_consume_token(GETS);
+    case NOT_EQUAL:{
+      jj_consume_token(NOT_EQUAL);
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case IDENTIFIER:{
         jj_consume_token(IDENTIFIER);
@@ -523,14 +742,14 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[27] = jj_gen;
+        jj_la1[30] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[31] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -554,7 +773,7 @@ public class simplejava implements simplejavaConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[29];
+  static final private int[] jj_la1 = new int[32];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -562,10 +781,10 @@ public class simplejava implements simplejavaConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x20000000,0x40160000,0x200000,0x800000,0x40160000,0x20000000,0x40000000,0x400000,0x40000000,0x40400000,0x0,0x40160000,0x1fa00000,0x0,0x1fa00000,0x400000,0x400000,0x80000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1fa00000,};
+      jj_la1_0 = new int[] {0x2000b000,0x2000b000,0x40f000,0x40f000,0xfa00000,0x40160000,0x0,0x40160000,0x2000b000,0x40000000,0x160000,0x4fa00000,0x0,0x40160000,0x4fa00000,0x40000000,0x40000000,0x0,0x0,0xfa00000,0x80000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xfa00000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x18000,0x1000,0x2000,0x18000,0x0,0x20,0x0,0x0,0x0,0x1,0x18000,0x10725,0x18000,0x304,0x0,0x0,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x304,};
+      jj_la1_1 = new int[] {0x10000,0x10000,0x0,0x13400,0x384,0x18000,0x3000,0x18000,0x10000,0x20,0x18000,0x137a5,0x1,0x18000,0x137a5,0x0,0x0,0x400,0x18000,0x384,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x18000,0x384,};
    }
 
   /** Constructor with InputStream. */
@@ -586,7 +805,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -600,7 +819,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -617,7 +836,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -627,7 +846,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -643,7 +862,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -652,7 +871,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -708,7 +927,7 @@ public class simplejava implements simplejavaConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 29; i++) {
+    for (int i = 0; i < 32; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

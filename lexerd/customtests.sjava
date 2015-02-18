@@ -1,5 +1,4 @@
-
-
+y =abe++;
 void foo() { }
 int y = 3;
 boolean x = y < 2;
@@ -9,9 +8,6 @@ myclclass z = new myclass();
 int A[];
 int B[] = new int[5];
 int C[][][] = new int[10][][];
-
-/* NOT PASSING */
-y =abe++;
 
 
 if (x= false){ b = false; } else { b = true; }
