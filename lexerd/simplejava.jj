@@ -125,8 +125,8 @@ void statement() :
 void ifstatement() :
 {}
 {
-	<IF> expression() <THEN> statement()
-		(LOOKAHEAD(1) <ELSE> statement)?
+	<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
+		(LOOKAHEAD(1) <ELSE> statement())?
 /*	<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() <ELSE> statement()*/
 /*|	<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() */
 
