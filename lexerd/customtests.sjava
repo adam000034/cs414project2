@@ -1,3 +1,9 @@
+int x;
+MyClass y;
+int array[];
+boolean twoDArray[][];
+
+int add(int x, int y);
 y =abe++;
 void foo() { }
 int y = 3;

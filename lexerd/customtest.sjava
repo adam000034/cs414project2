@@ -1,8 +1,22 @@
 int add(int x, int y);
-boolean not(boolean x);
-void printBoard(int board[][]);
 
+boolean not(boolean x) { abe = true; block = false; }
+
+boolean not(boolean x);
+int x;
+MyClass y;
+int array[];
+boolean twoDArray[][];
+
+void printBoard(int board[][]);
 class abe { int x; myclass y; int array[]; boolean twodarray[][]; }
+int add(int x, int y);
+y =abe++;
+void foo() { }
+int y = 3;
+boolean x = y < 2;
+myclass w;
+
 
 y =abe-b;
 
@@ -16,9 +30,7 @@ int A[];
 int B[] = new int[5];
 int C[][][] = new int[10][][];
 
-/* NOT PASSING */
 
-/*-----*/
 if (x= false){ b = false; } else { b = true; }
 true
 false

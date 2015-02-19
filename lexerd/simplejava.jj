@@ -87,16 +87,25 @@ void program() :
 //	expression() <EOF>
 }
 
-void functionprototypes() :
+void functionprototypeordefinition() :
 {}
 {
-	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> formalparameterlist() <RIGHT_PARENTHESIS>
+	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> formalparameterlist() <RIGHT_PARENTHESIS> functionendingafterparen()
+}
+
+void functionendingafterparen() :
+{}
+{
+	/* FUNCTION PROTOTYPE */
+	<SEMICOLON>
+	/* FUNCTION DEFINITION */
+|	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
 }
 
 void formalparameterlist() :
 {}
 {
-	((formalparameter() <COMMA>)?)(((formalparameter())<COMMA>)*)(formalparameter())
+	(formalparameter())((<COMMA>formalparameter())*)
 }
 
 void formalparameter() :
@@ -208,7 +217,14 @@ void incrementstatements() :
 void variabledeclarations() :
 {}
 {	
-	<IDENTIFIER> (((followsvariablenames())*) | (<LEFT_BRACKET> followsbrackets())+) 	
+	<IDENTIFIER> <IDENTIFIER> ((followsclassdefinitionstypes())*)
+}
+
+void followsclassdefinitionstypes() :
+{}
+{
+	<LEFT_BRACKET> ((followsbrackets())+) 
+
 }
 
 void variabledefinitions() :
