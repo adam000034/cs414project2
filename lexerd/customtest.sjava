@@ -1,4 +1,9 @@
-int add(int x, int y);
+void main() { company C; C=ReadCompany(); WriteCompany(cat);}
+company C;
+
+C = ReadCompany();
+int add();
+
 
 boolean not(boolean x) { abe = true; block = false; }
 

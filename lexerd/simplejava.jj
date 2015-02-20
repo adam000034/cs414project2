@@ -90,7 +90,7 @@ void program() :
 void functionprototypeordefinition() :
 {}
 {
-	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> formalparameterlist() <RIGHT_PARENTHESIS> functionendingafterparen()
+	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> ((formalparameterlist())?) <RIGHT_PARENTHESIS> functionendingafterparen()
 }
 
 void functionendingafterparen() :
@@ -187,7 +187,7 @@ void expression() :
 	<TRUE>
 |	<FALSE>
 |	<INTEGER_LITERAL> ((arithimiticandlogic())*)
-|	<IDENTIFIER> followsvariablenames() <SEMICOLON>
+|	<IDENTIFIER> ((followsvariablenames() <SEMICOLON>)?)
 /*	NEW EXPRESSIONS */
 |	<NEW> <IDENTIFIER> followsnewandidentifier() <SEMICOLON>
 /*	OPERATOR EXPRESSIONS */
@@ -244,13 +244,13 @@ void variable() :
 void expressionlist() :
 {}
 {
-	((expression()((<COMMA>)))*)expression()
+	expression()((<COMMA>expression())*)
 }
 
 void statementlist() :
 {}
 {
-	(((statement()<SEMICOLON>))*)statement()<SEMICOLON>
+	statement()((statement())*)
 }
 
 void followsnewandidentifier() :
@@ -272,7 +272,7 @@ void followsvariablenames() :
 	/* How to prevent from class types from getting the same rules as variables*/
 	<IDENTIFIER> ((followsvariablenames())*) 
 |	((<PERIOD> <IDENTIFIER>)+)
-|	<LEFT_PARENTHESIS> ((expressionlist())*) <RIGHT_PARENTHESIS>
+|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
 |	arithimiticandlogic() 
 |	assignmentstatement() 
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
