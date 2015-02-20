@@ -17,8 +17,8 @@ TOKEN_MGR_DECLS :
 SKIP : 
 {
   	< " " >
-|   < "\\t">
-|   < "\t">
+|   	< "\\t">
+|   	< "\t">
 |	< "EOF">
 |	< "\n">
 |	< "/*" > { nestedcomments++; SwitchTo(IN_COMMENT);}
@@ -75,7 +75,7 @@ TOKEN :
 |	< ADD: "++">
 |	< MINUSMINUS: "--">
 |	< ONEVALUE: "1">
-|   < INTEGER_LITERAL: (["0"-"9"])+>
+|   	< INTEGER_LITERAL: (["0"-"9"])+>
 |	< IDENTIFIER: ["a"-"z"](["a"-"z","0"-"9"])*>
 }
 
@@ -276,13 +276,19 @@ void followsvariablenames() :
 |	arithimiticandlogic() 
 |	assignmentstatement() 
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
-|	variabledeclarionstatemementsbrackets()
+|	variabledeclarationstatemementsbrackets()
 }
 
-void variabledeclarionstatemementsbrackets() :
+void variabledeclarationstatemementsbrackets() :
 {}
 {
-	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) 
+	((<LEFT_BRACKET> followsbrackets())+) 
+		((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
+		<LEFT_BRACKET> (<INTEGER_LITERAL>|<IDENTIFIER>) ((arithmetic())*) <RIGHT_BRACKET>	
+			/* [something] --> used * for arithmetic() because could be more than one: ex: [10-5+3] */
+		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))))?) 		/* [][][]... */
+
+/*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
 }
 
 void followsbrackets() :
@@ -306,6 +312,15 @@ void arithimiticandlogic() :
 |	<EQUAL> (<IDENTIFIER>|<INTEGER_LITERAL>)
 |	<NOT_EQUAL> (<IDENTIFIER>|<INTEGER_LITERAL>)
 /* |(<AND> | <OR>) (<IDENTIFIER>|<INTEGER_LITERAL>) */
+}
+
+void arithmetic() :
+{}
+{
+	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<MINUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<DIVIDE> (<INTEGER_LITERAL>|<IDENTIFIER>)
+|	<TIMES> (<INTEGER_LITERAL>|<IDENTIFIER>)
 }
 
 void operatorexpressionsvariables() :
