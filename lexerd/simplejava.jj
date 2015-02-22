@@ -83,7 +83,7 @@ void program() :
 {}
 {    
 /*perhaps put a star there to check multiple statements */
-	(statement()) <EOF>  
+	(statement())  
 //	expression() <EOF>
 }
 
@@ -125,10 +125,12 @@ void statement() :
 {}
 {
 	dowhilestatement()
+|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
 |	<IF> ifstatement()
 |	forstatement()
 |	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
 |	<IDENTIFIER> followsvariablenames() <SEMICOLON>
+|	emptystatement()
 }
 
 void ifstatement() :
@@ -147,11 +149,12 @@ void emptystatement() :
 {}
 {
 	<SEMICOLON>
-|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
-/* May not be necessary but added here anyways just to be sure */
+/* May not be necessary but added here anyways just to be sure 
 |	<DO> <LEFT_BRACE> <RIGHT_BRACE> <WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
 |	<FOR> <LEFT_PARENTHESIS> initialization() <SEMICOLON> test() <SEMICOLON> initialization() <RIGHT_PARENTHESIS> <SEMICOLON>
 |	<IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <RIGHT_BRACE>
+|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
+*/
 }
 
 void initialization() :
