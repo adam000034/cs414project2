@@ -288,7 +288,7 @@ void variabledeclarationstatemementsbrackets() :
 		((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
 		<LEFT_BRACKET> (<INTEGER_LITERAL>|<IDENTIFIER>) ((arithmetic())*) <RIGHT_BRACKET>	
 			/* [something] --> used * for arithmetic() because could be more than one: ex: [10-5+3] */
-		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))))?) 		/* [][][]... */
+		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))?) 		/* [][][]... */
 
 /*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
 }
