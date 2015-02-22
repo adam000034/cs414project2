@@ -79,11 +79,9 @@ public interface simplejavaConstants {
   /** RegularExpression Id. */
   int MINUSMINUS = 45;
   /** RegularExpression Id. */
-  int ONEVALUE = 46;
+  int INTEGER_LITERAL = 46;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 47;
-  /** RegularExpression Id. */
-  int IDENTIFIER = 48;
+  int IDENTIFIER = 47;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -138,7 +136,6 @@ public interface simplejavaConstants {
     "\"||\"",
     "\"++\"",
     "\"--\"",
-    "\"1\"",
     "<INTEGER_LITERAL>",
     "<IDENTIFIER>",
   };

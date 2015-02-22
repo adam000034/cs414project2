@@ -17,8 +17,8 @@ TOKEN_MGR_DECLS :
 SKIP : 
 {
   	< " " >
-|   	< "\\t">
-|   	< "\t">
+|   < "\\t">
+|   < "\t">
 |	< "EOF">
 |	< "\n">
 |	< "/*" > { nestedcomments++; SwitchTo(IN_COMMENT);}
@@ -74,8 +74,7 @@ TOKEN :
 |	< OR: "||">
 |	< ADD: "++">
 |	< MINUSMINUS: "--">
-|	< ONEVALUE: "1">
-|   	< INTEGER_LITERAL: (["0"-"9"])+>
+|   < INTEGER_LITERAL: (["0"-"9"])+>
 |	< IDENTIFIER: ["a"-"z"](["a"-"z","0"-"9"])*>
 }
 
@@ -125,6 +124,7 @@ void statement() :
 {}
 {
 	dowhilestatement()
+|	<RETURN> expression() 
 |	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
 |	<IF> ifstatement()
 |	forstatement()
@@ -192,7 +192,7 @@ void expression() :
 	<TRUE>
 |	<FALSE>
 |	<INTEGER_LITERAL> ((arithimiticandlogic())*)
-|	<IDENTIFIER> ((followsvariablenames() <SEMICOLON>)?)
+|	<IDENTIFIER> ((followsvariablenames())?) ((<SEMICOLON>)?)
 /*	NEW EXPRESSIONS */
 |	<NEW> <IDENTIFIER> followsnewandidentifier() <SEMICOLON>
 /*	OPERATOR EXPRESSIONS */
