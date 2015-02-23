@@ -126,7 +126,7 @@ void statement() :
 {
 	dowhilestatement()
 |	<RETURN> expression() 
-|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
+|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
 |	<IF> ifstatement()
 |	forstatement()
 |	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
@@ -137,7 +137,7 @@ void statement() :
 void ifstatement() :
 {}
 {
-	<LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> statement()
+	<LEFT_PARENTHESIS> expression() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> statement()
 			((LOOKAHEAD(1) <ELSE> statement())?) 
 	/*<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
 		((LOOKAHEAD(1) <ELSE> statement())?) */
@@ -154,7 +154,7 @@ void emptystatement() :
 |	<DO> <LEFT_BRACE> <RIGHT_BRACE> <WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
 |	<FOR> <LEFT_PARENTHESIS> initialization() <SEMICOLON> test() <SEMICOLON> initialization() <RIGHT_PARENTHESIS> <SEMICOLON>
 |	<IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <RIGHT_BRACE>
-|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
+|	<WHILE> <LEFT_PARENTHESIS> test() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> <SEMICOLON>
 */
 }
 
@@ -182,21 +182,22 @@ void forstatement() :
 void test() :
 {}
 {
-	booleanexpression()
-|	<IDENTIFIER> ((followsvariablenames())?)
+/*	booleanexpression() */
+/*|	<IDENTIFIER> ((followsvariablenames())?) */
+	expression()
 }
 
 void dowhilestatement() :
 {}
 {
-	<DO> statement() <WHILE> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> 
+	<DO> statement() <WHILE> <LEFT_PARENTHESIS> expression() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> 
 }
 
 void expression() :
 {}
 {
 	booleanexpression()
-|	<IDENTIFIER> ((followsvariablenames())?) ((<SEMICOLON>)?)
+|	<IDENTIFIER> ((expressionsversionfollowsvariablenames())?) ((<SEMICOLON>)?)
 /*	NEW EXPRESSIONS */
 |	<NEW> <IDENTIFIER> followsnewandidentifier() <SEMICOLON>
 /*	OPERATOR EXPRESSIONS */
@@ -280,7 +281,7 @@ void followsnewandidentifier() :
 void assignmentstatement() :
 {}
 {
-	<GETS> (<IDENTIFIER> ((followsvariablenames())?) | <INTEGER_LITERAL> | <NEW> <IDENTIFIER> followsnewandidentifier() | <TRUE> | <FALSE>)
+	<GETS> ((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> followsnewandidentifier()) | (<TRUE>) | (<FALSE>))
 }
 
 void followsvariablenames() :
@@ -288,12 +289,26 @@ void followsvariablenames() :
 {
 	/* How to prevent from class types from getting the same rules as variables*/
 	<IDENTIFIER> ((followsvariablenames())*) 
-|	((<PERIOD> <IDENTIFIER>)+)
+|	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
 |	arithmeticandlogic() 
 |	assignmentstatement()
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
 |	variabledeclarationstatemementsbrackets()
+|	incrementstatements()
+}
+
+void expressionsversionfollowsvariablenames() :
+{}
+{
+	/* How to prevent from class types from getting the same rules as variables*/
+	<IDENTIFIER> ((followsvariablenames())*) 
+|	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
+|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
+|	arithmeticandlogic() 
+/* Need a way to make sure that amount of brackets are matched on left side with number on right side */
+|	variabledeclarationstatemementsbrackets()
+|	incrementstatements()
 }
 
 void variabledeclarationstatemementsbrackets() :

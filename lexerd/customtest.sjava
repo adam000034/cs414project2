@@ -1,3 +1,9 @@
+x++;
+e.employees[i] = new employee();
+cab.employees[i].sac[i].bad[jab] = new employee();
+c.employess = new int[c.numEmployees];
+c.numEmployees = read();	//WORKING
+while (true) x = 1;		//WORKING
 x = y;					//WORKING
 
 
