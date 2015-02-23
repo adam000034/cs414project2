@@ -1,3 +1,12 @@
+x = y;					//WORKING
+
+
+for (int x = 10; x < 20; x++;) {}	//WORKING: init and increment
+
+
+while (true) {x = 1;}				//WORKING --> while loops
+
+
 return i-1;
 return x;						//RETURN STATEMENTS
 
@@ -8,11 +17,8 @@ int read();						//BUILT-IN FUNCTIONS
 
 
 {;}							//WORKING --> empty statements
-return x;					//NOT HANDLED --> return statements
 arachn(x, 10, x + 20;);		//WORKING --> Void Function calls
-for (int x = 10; x < 20; x ++;) {}	//NOT WORKING: init and increment
 do {x + y;} while (10 > 3)		//WORKING --> dowhile
-while (true) {}								//NOT WORKING: while loops
 if (x= false;) if (y = true;) {} else {}	//WORKING: if, dangling else
 
 

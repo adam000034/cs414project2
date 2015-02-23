@@ -82,7 +82,8 @@ void program() :
 {}
 {    
 /*perhaps put a star there to check multiple statements */
-	(statement())  
+	/* 1) 0 or more class defs	2) 0 or more function defs	3) EOF */
+	((classdefinitions())*) ((functionprototypeordefinition())*) <EOF> 
 //	expression() <EOF>
 }
 
@@ -125,7 +126,7 @@ void statement() :
 {
 	dowhilestatement()
 |	<RETURN> expression() 
-|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
+|	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
 |	<IF> ifstatement()
 |	forstatement()
 |	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
@@ -171,13 +172,18 @@ void forstatement() :
 {}
 {
 	/*Second initialization() is actually increment from book */
-	<FOR> <LEFT_PARENTHESIS> initialization() <SEMICOLON> test() <SEMICOLON> initialization() <RIGHT_PARENTHESIS> statement()
+	<FOR> <LEFT_PARENTHESIS> 
+		((<IDENTIFIER> followsvariablenames())?) <SEMICOLON> 
+		test() <SEMICOLON> 
+		((<IDENTIFIER> initialization())?) <SEMICOLON> 
+		<RIGHT_PARENTHESIS> statement()
 }
 
 void test() :
 {}
 {
-	<IDENTIFIER> followsvariablenames()
+	booleanexpression()
+|	<IDENTIFIER> ((followsvariablenames())?)
 }
 
 void dowhilestatement() :
@@ -189,15 +195,21 @@ void dowhilestatement() :
 void expression() :
 {}
 {
-	<TRUE>
-|	<FALSE>
-|	<INTEGER_LITERAL> ((arithimiticandlogic())*)
+	booleanexpression()
 |	<IDENTIFIER> ((followsvariablenames())?) ((<SEMICOLON>)?)
 /*	NEW EXPRESSIONS */
 |	<NEW> <IDENTIFIER> followsnewandidentifier() <SEMICOLON>
 /*	OPERATOR EXPRESSIONS */
 /*|	operatorexpressionsvariablesornumbers() */
 |	variable()
+}
+
+void booleanexpression() :
+{}
+{
+	<TRUE>
+|	<FALSE>
+|	<INTEGER_LITERAL> ((arithmeticandlogic())*)
 }
 
 void incrementstatement() :
@@ -268,7 +280,7 @@ void followsnewandidentifier() :
 void assignmentstatement() :
 {}
 {
-	<GETS> (<IDENTIFIER> followsvariablenames() | <INTEGER_LITERAL> | <NEW> <IDENTIFIER> followsnewandidentifier() | <TRUE> | <FALSE>)
+	<GETS> (<IDENTIFIER> ((followsvariablenames())?) | <INTEGER_LITERAL> | <NEW> <IDENTIFIER> followsnewandidentifier() | <TRUE> | <FALSE>)
 }
 
 void followsvariablenames() :
@@ -278,8 +290,8 @@ void followsvariablenames() :
 	<IDENTIFIER> ((followsvariablenames())*) 
 |	((<PERIOD> <IDENTIFIER>)+)
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
-|	arithimiticandlogic() 
-|	assignmentstatement() 
+|	arithmeticandlogic() 
+|	assignmentstatement()
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
 |	variabledeclarationstatemementsbrackets()
 }
@@ -299,17 +311,14 @@ void variabledeclarationstatemementsbrackets() :
 void followsbrackets() :
 {}
 {
-	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithimiticandlogic())?) <RIGHT_BRACKET> 
+	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithmeticandlogic())?) <RIGHT_BRACKET> 
 |	<RIGHT_BRACKET> 
 }
 
-void arithimiticandlogic() :
+void arithmeticandlogic() :
 {}
 {
-	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
-|	<MINUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
-|	<DIVIDE> (<INTEGER_LITERAL>|<IDENTIFIER>)
-|	<TIMES> (<INTEGER_LITERAL>|<IDENTIFIER>)
+	arithmetic()
 |	<GREATER_THAN> (<IDENTIFIER>|<INTEGER_LITERAL>)
 |	<LESS_THAN> (<IDENTIFIER>|<INTEGER_LITERAL>)
 |	<LESS_THAN_OR_EQUAL_TO> (<IDENTIFIER>|<INTEGER_LITERAL>)
