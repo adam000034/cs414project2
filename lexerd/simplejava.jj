@@ -272,14 +272,15 @@ void statementlist() :
 void followsnewandidentifier() :
 {}
 {
-	<LEFT_BRACKET> followsbrackets() 
+	<LEFT_BRACKET> (followsbrackets())
 |	<LEFT_PARENTHESIS><RIGHT_PARENTHESIS>
 }
 
 void assignmentstatement() :
 {}
 {
-	<GETS> ((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> followsnewandidentifier()) | (<TRUE>) | (<FALSE>))
+	<GETS> ((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> (followsnewandidentifier())) | (<TRUE>) | (<FALSE>))
+
 }
 
 void followsvariablenames() :
@@ -313,14 +314,7 @@ void variabledeclarationstatemementsbrackets() :
 {}
 {
 	((<LEFT_BRACKET> followsbrackets())+) 
-		(assignmentstatement() | ((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
-		<LEFT_BRACKET> 
-			((<INTEGER_LITERAL>((followsintegerwithinbrackets())*))
-			| (<IDENTIFIER>((followsidentifierwithinbrackets())*)))
-		<RIGHT_BRACKET>	
-			/* [something] --> used * for withinbrackeets() because could be more than one: ex: [10 + function() + x.y.z] 
-			separated integer with identifier because cannot have integer.identifier*/
-		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))?)) 		/* [][][]... */
+		((assignmentstatement())?) 		/* [][][]... */
 
 /*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
 }
@@ -345,7 +339,8 @@ void followsidentifierwithinbrackets() :
 void followsbrackets() :
 {}
 {
-	(<INTEGER_LITERAL>|<IDENTIFIER>) ((arithmeticandlogic())?) <RIGHT_BRACKET> 
+	((<INTEGER_LITERAL> ((followsintegerwithinbrackets())*) ((arithmeticandlogic())?) <RIGHT_BRACKET>((<LEFT_BRACKET> <RIGHT_BRACKET>)*))| (<IDENTIFIER>((followsidentifierwithinbrackets())*)((arithmeticandlogic())?) <RIGHT_BRACKET> (((<PERIOD> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())*))) | ((<LEFT_BRACKET> <RIGHT_BRACKET>)*))))
+	/*|<IDENTIFIER>) ((arithmeticandlogic())?) <RIGHT_BRACKET> */
 |	<RIGHT_BRACKET> 
 }
 
@@ -353,12 +348,12 @@ void arithmeticandlogic() :
 {}
 {
 	arithmetic()
-|	<GREATER_THAN> (<IDENTIFIER>|<INTEGER_LITERAL>)
-|	<LESS_THAN> (<IDENTIFIER>|<INTEGER_LITERAL>)
-|	<LESS_THAN_OR_EQUAL_TO> (<IDENTIFIER>|<INTEGER_LITERAL>)
-|	<GREATER_THAN_OR_EQUAL_TO> (<IDENTIFIER>|<INTEGER_LITERAL>)
-|	<EQUAL> (<IDENTIFIER>|<INTEGER_LITERAL>)
-|	<NOT_EQUAL> (<IDENTIFIER>|<INTEGER_LITERAL>)
+|	<GREATER_THAN> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
+|	<LESS_THAN> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*)) |<INTEGER_LITERAL>)
+|	<LESS_THAN_OR_EQUAL_TO> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
+|	<GREATER_THAN_OR_EQUAL_TO> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
+|	<EQUAL> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
+|	<NOT_EQUAL> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
 /* |(<AND> | <OR>) (<IDENTIFIER>|<INTEGER_LITERAL>) */
 }
 

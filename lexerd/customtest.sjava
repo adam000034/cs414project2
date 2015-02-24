@@ -1,10 +1,25 @@
-for (int x = 10; x < 20; x++;) {}	//WORKING: init and increment
+c.employees[i].IDnumber = read();
+cab.employees[i].sac[i].bad[jab] = new employee();  //WORKING
+c.employess = new int[c.numEmployees]; //WORKING
+e.employees[i] = new employee();  //WORKING
+employe[i] = new employee();	//WORKING
+for (int x = 10; x < 20; x++) {}	//WORKING: init and increment
+for (int x = 10; x < c.Num; x++) {}	//WORKING remove semicolon from x++
+
+
+
+
+
+
+
+
+
 
 
 x++;
-e.employees[i] = new employee();
-cab.employees[i].sac[i].bad[jab] = new employee();
-c.employess = new int[c.numEmployees];
+
+
+
 c.numEmployees = read();	//WORKING
 while (true) x = 1;		//WORKING
 x = y;					//WORKING
