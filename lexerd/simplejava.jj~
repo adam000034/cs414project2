@@ -317,10 +317,11 @@ void variabledeclarationstatemementsbrackets() :
 	((<LEFT_BRACKET> followsbrackets())+) 
 		((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
 		<LEFT_BRACKET> 
-			(<INTEGER_LITERAL>((followsintegerwithinbrackets())*)
-			| <IDENTIFIER>((followsidentifierwithinbrackets())*)) <RIGHT_BRACKET>	
+			((<INTEGER_LITERAL>((followsintegerwithinbrackets())*))
+			| (<IDENTIFIER>((followsidentifierwithinbrackets())*)))
+		<RIGHT_BRACKET>	
 			/* [something] --> used * for withinbrackeets() because could be more than one: ex: [10 + function() + x.y.z] 
-separated integer with identifier because cannot have integer.identifier*/
+			separated integer with identifier because cannot have integer.identifier*/
 		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))?) 		/* [][][]... */
 
 /*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
@@ -330,14 +331,21 @@ void followsintegerwithinbrackets() :
 {}
 {
 	(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>) 
-		(<INTEGER_LITERAL>|
-		(<IDENTIFIER>|<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>)(followsidentifierwithinbrackets())*)
+		(<INTEGER_LITERAL>
+		| (
+			<IDENTIFIER>
+			| (
+				<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
+			)
+		)
+		(followsidentifierwithinbrackets())*
+		)
 }
 
 void followsidentifierwithinbrackets() :
 {}
 {
-	(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>) (<IDENTIFIER>|<INTEGER_LITERAL>|<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>)
+	(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>) (<IDENTIFIER>|<INTEGER_LITERAL>|(<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>))
 |	((<PERIOD> <IDENTIFIER>)+)
 }
 
