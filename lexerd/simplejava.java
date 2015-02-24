@@ -1285,29 +1285,15 @@ public class simplejava implements simplejavaConstants {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case IDENTIFIER:{
         jj_consume_token(IDENTIFIER);
-        label_25:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case PERIOD:{
-            ;
-            break;
-            }
-          default:
-            jj_la1[65] = jj_gen;
-            break label_25;
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case LEFT_BRACKET:{
+          jj_consume_token(LEFT_BRACKET);
+          followsbrackets();
+          break;
           }
-          jj_consume_token(PERIOD);
-          jj_consume_token(IDENTIFIER);
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case LEFT_BRACKET:{
-            jj_consume_token(LEFT_BRACKET);
-            followsbrackets();
-            break;
-            }
-          default:
-            jj_la1[66] = jj_gen;
-            ;
-          }
+        default:
+          jj_la1[65] = jj_gen;
+          ;
         }
         break;
         }
@@ -1316,7 +1302,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[67] = jj_gen;
+        jj_la1[68] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1327,29 +1313,15 @@ public class simplejava implements simplejavaConstants {
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case IDENTIFIER:{
         jj_consume_token(IDENTIFIER);
-        label_26:
-        while (true) {
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case PERIOD:{
-            ;
-            break;
-            }
-          default:
-            jj_la1[68] = jj_gen;
-            break label_26;
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case LEFT_BRACKET:{
+          jj_consume_token(LEFT_BRACKET);
+          followsbrackets();
+          break;
           }
-          jj_consume_token(PERIOD);
-          jj_consume_token(IDENTIFIER);
-          switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-          case LEFT_BRACKET:{
-            jj_consume_token(LEFT_BRACKET);
-            followsbrackets();
-            break;
-            }
-          default:
-            jj_la1[69] = jj_gen;
-            ;
-          }
+        default:
+          jj_la1[69] = jj_gen;
+          ;
         }
         break;
         }
@@ -1358,7 +1330,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[70] = jj_gen;
+        jj_la1[72] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1377,7 +1349,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[71] = jj_gen;
+            jj_la1[73] = jj_gen;
             break label_27;
           }
           jj_consume_token(PERIOD);
@@ -1389,7 +1361,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[72] = jj_gen;
+            jj_la1[74] = jj_gen;
             ;
           }
         }
@@ -1400,7 +1372,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[73] = jj_gen;
+        jj_la1[75] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1419,7 +1391,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[74] = jj_gen;
+            jj_la1[76] = jj_gen;
             break label_28;
           }
           jj_consume_token(PERIOD);
@@ -1431,7 +1403,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[75] = jj_gen;
+            jj_la1[77] = jj_gen;
             ;
           }
         }
@@ -1442,7 +1414,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[76] = jj_gen;
+        jj_la1[78] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1461,7 +1433,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[77] = jj_gen;
+            jj_la1[79] = jj_gen;
             break label_29;
           }
           jj_consume_token(PERIOD);
@@ -1473,7 +1445,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[78] = jj_gen;
+            jj_la1[80] = jj_gen;
             ;
           }
         }
@@ -1484,7 +1456,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[79] = jj_gen;
+        jj_la1[81] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1503,7 +1475,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[80] = jj_gen;
+            jj_la1[82] = jj_gen;
             break label_30;
           }
           jj_consume_token(PERIOD);
@@ -1515,7 +1487,7 @@ public class simplejava implements simplejavaConstants {
             break;
             }
           default:
-            jj_la1[81] = jj_gen;
+            jj_la1[83] = jj_gen;
             ;
           }
         }
@@ -1526,14 +1498,14 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[82] = jj_gen;
+        jj_la1[84] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[83] = jj_gen;
+      jj_la1[85] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1553,7 +1525,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[84] = jj_gen;
+        jj_la1[86] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1571,7 +1543,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[85] = jj_gen;
+        jj_la1[87] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1589,7 +1561,7 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[86] = jj_gen;
+        jj_la1[88] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1607,14 +1579,14 @@ public class simplejava implements simplejavaConstants {
         break;
         }
       default:
-        jj_la1[87] = jj_gen;
+        jj_la1[89] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
       }
     default:
-      jj_la1[88] = jj_gen;
+      jj_la1[90] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1638,7 +1610,7 @@ public class simplejava implements simplejavaConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[89];
+  static final private int[] jj_la1 = new int[91];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1646,10 +1618,10 @@ public class simplejava implements simplejavaConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x10000,0x0,0x0,0x2048f000,0x20400000,0x0,0x2048f000,0x2048f000,0x0,0x0,0x800,0x0,0x4fa00000,0x0,0x0,0x4fa00000,0x60000,0x0,0x0,0x4fa00000,0x400000,0x40160000,0xfa00000,0x60000,0x0,0x40000000,0x80000000,0x0,0x0,0x2048f000,0x40000000,0x4fa00000,0x160000,0x4fa00000,0x0,0x4fa00000,0x40160000,0x4fa00000,0x4fa00000,0x0,0x4fa00000,0x40160000,0x4fa00000,0x40000000,0x0,0x3a00000,0x40160000,0x0,0x3a00000,0x0,0x3a00000,0x40160000,0x0,0x0,0x3a00000,0x3a00000,0xfa00000,0x40000000,0x3a00000,0xfa00000,0x40000000,0x40000000,0x0,0x0,0x80000000,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0xfa00000,0x0,0x0,0x0,0x0,0x3a00000,};
+      jj_la1_0 = new int[] {0x10000,0x0,0x0,0x2048f000,0x20400000,0x0,0x2048f000,0x2048f000,0x0,0x0,0x800,0x0,0x4fa00000,0x0,0x0,0x4fa00000,0x60000,0x0,0x0,0x4fa00000,0x400000,0x40160000,0xfa00000,0x60000,0x0,0x40000000,0x80000000,0x0,0x0,0x2048f000,0x40000000,0x4fa00000,0x160000,0x4fa00000,0x0,0x4fa00000,0x40160000,0x4fa00000,0x4fa00000,0x0,0x4fa00000,0x40160000,0x4fa00000,0x40000000,0x0,0x3a00000,0x40160000,0x0,0x3a00000,0x0,0x3a00000,0x40160000,0x0,0x0,0x3a00000,0x3a00000,0xfa00000,0x40000000,0x3a00000,0xfa00000,0x40000000,0x40000000,0x0,0x0,0x80000000,0x40000000,0x0,0x40000000,0x0,0x40000000,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0x0,0x40000000,0x0,0xfa00000,0x0,0x0,0x0,0x0,0x3a00000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x8000,0x8000,0x8000,0x0,0x2,0x8000,0x8000,0x8,0x800,0x0,0x3400,0xb7a5,0x8000,0x8000,0xb3a5,0xc000,0x8,0x800,0xb3a5,0x0,0xc000,0x384,0x4000,0x3000,0x0,0xc000,0x8000,0x2,0x8000,0x20,0xb7a5,0xc000,0xb7a5,0x1,0xb7a5,0xc000,0xb7a5,0xb3a5,0x1,0xb7a5,0xc000,0xb3a5,0x0,0x400,0x0,0xc000,0x8020,0x1,0xc020,0x0,0xc000,0xc020,0x1,0x1,0x0,0x384,0x0,0x1,0x384,0x0,0x0,0x1,0xc000,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x384,0xc000,0xc000,0xc000,0xc000,0x0,};
+      jj_la1_1 = new int[] {0x0,0x8000,0x8000,0x8000,0x0,0x2,0x8000,0x8000,0x8,0x800,0x0,0x3400,0xb7a5,0x8000,0x8000,0xb3a5,0xc000,0x8,0x800,0xb3a5,0x0,0xc000,0x384,0x4000,0x3000,0x0,0xc000,0x8000,0x2,0x8000,0x20,0xb7a5,0xc000,0xb7a5,0x1,0xb7a5,0xc000,0xb7a5,0xb3a5,0x1,0xb7a5,0xc000,0xb3a5,0x0,0x400,0x0,0xc000,0x8020,0x1,0xc020,0x0,0xc000,0xc020,0x1,0x1,0x0,0x384,0x0,0x1,0x384,0x0,0x0,0x1,0xc000,0xc000,0x0,0x1,0x0,0xc000,0x0,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x1,0x0,0xc000,0x384,0xc000,0xc000,0xc000,0xc000,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -1670,7 +1642,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 89; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 91; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1684,7 +1656,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 89; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 91; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1701,7 +1673,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 89; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 91; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1711,7 +1683,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 89; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 91; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1727,7 +1699,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 89; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 91; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1736,7 +1708,7 @@ public class simplejava implements simplejavaConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 89; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 91; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -1792,7 +1764,7 @@ public class simplejava implements simplejavaConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 89; i++) {
+    for (int i = 0; i < 91; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

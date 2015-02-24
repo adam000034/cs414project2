@@ -348,8 +348,8 @@ void arithmeticandlogic() :
 {}
 {
 	arithmetic()
-|	<GREATER_THAN> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
-|	<LESS_THAN> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*)) |<INTEGER_LITERAL>)
+|	<GREATER_THAN> (<IDENTIFIER> (((<LEFT_BRACKET> followsbrackets())?) | ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
+|	<LESS_THAN> ((<IDENTIFIER> (((<LEFT_BRACKET> followsbrackets())?) | ((<PERIOD> <IDENTIFIER>((<LEFT_BRACKET> followsbrackets())?))*)) |<INTEGER_LITERAL>))
 |	<LESS_THAN_OR_EQUAL_TO> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
 |	<GREATER_THAN_OR_EQUAL_TO> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
 |	<EQUAL> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
