@@ -314,7 +314,7 @@ void expressionsversionfollowsvariablenames() :
 void variabledeclarationstatemementsbrackets() :
 {}
 {
-	((<LEFT_BRACKET> followsbrackets())+) 
+	/*((<LEFT_BRACKET> followsbrackets())+) */
 		((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
 		<LEFT_BRACKET> 
 			((<INTEGER_LITERAL>((followsintegerwithinbrackets())*))
@@ -332,13 +332,8 @@ void followsintegerwithinbrackets() :
 {
 	(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>) 
 		(<INTEGER_LITERAL>
-		| (
-			<IDENTIFIER>
-			| (
-				<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
-			)
-		)
-		(followsidentifierwithinbrackets())*
+		| 
+		((<IDENTIFIER> | (<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>)) (followsidentifierwithinbrackets())*)
 		)
 }
 

@@ -6,7 +6,7 @@ void main() {
 	boolean flag[];
 
 	size = read();
-	flag = new boolean[size]
+	flag = new boolean[size];
 	for (i=2; i < size; i++)
 		flag[i] = true;
 	for(i=2; i < size; i++)

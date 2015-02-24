@@ -161,11 +161,9 @@ void emptystatement() :
 void initialization() :
 {}
 {
-	<IDENTIFIER> 
-|	incrementstatement()
+	incrementstatement()
 |	decrementstatement()
 |	assignmentstatement()
-|	emptystatement()
 }
 
 void forstatement() :
@@ -173,18 +171,18 @@ void forstatement() :
 {
 	/*Second initialization() is actually increment from book */
 	<FOR> <LEFT_PARENTHESIS> 
-		((<IDENTIFIER> followsvariablenames())?) <SEMICOLON> 
+		((<IDENTIFIER> (followsvariablenames())*)?) <SEMICOLON> 
 		test() <SEMICOLON> 
-		((<IDENTIFIER> initialization())?) <SEMICOLON> 
+		((<IDENTIFIER> initialization())?) 
 		<RIGHT_PARENTHESIS> statement()
 }
 
 void test() :
 {}
 {
-/*	booleanexpression() */
-/*|	<IDENTIFIER> ((followsvariablenames())?) */
-	expression()
+	booleanexpression()
+|	<IDENTIFIER> ((expressionsversionfollowsvariablenames())?)
+//	expression()
 }
 
 void dowhilestatement() :
@@ -302,7 +300,7 @@ void expressionsversionfollowsvariablenames() :
 {}
 {
 	/* How to prevent from class types from getting the same rules as variables*/
-	<IDENTIFIER> ((followsvariablenames())*) 
+	<IDENTIFIER> ((expressionsversionfollowsvariablenames())*) 
 |	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
 |	arithmeticandlogic() 
@@ -315,14 +313,14 @@ void variabledeclarationstatemementsbrackets() :
 {}
 {
 	((<LEFT_BRACKET> followsbrackets())+) 
-		((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
+		(assignmentstatement() | ((<GETS> <NEW> <IDENTIFIER> 			/* = new id */
 		<LEFT_BRACKET> 
 			((<INTEGER_LITERAL>((followsintegerwithinbrackets())*))
 			| (<IDENTIFIER>((followsidentifierwithinbrackets())*)))
 		<RIGHT_BRACKET>	
 			/* [something] --> used * for withinbrackeets() because could be more than one: ex: [10 + function() + x.y.z] 
 			separated integer with identifier because cannot have integer.identifier*/
-		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))?) 		/* [][][]... */
+		((<LEFT_BRACKET> <RIGHT_BRACKET>)*))?)) 		/* [][][]... */
 
 /*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
 }

@@ -1,3 +1,6 @@
+for (int x = 10; x < 20; x++;) {}	//WORKING: init and increment
+
+
 x++;
 e.employees[i] = new employee();
 cab.employees[i].sac[i].bad[jab] = new employee();
@@ -7,7 +10,6 @@ while (true) x = 1;		//WORKING
 x = y;					//WORKING
 
 
-for (int x = 10; x < 20; x++;) {}	//WORKING: init and increment
 
 
 while (true) {x = 1;}				//WORKING --> while loops
