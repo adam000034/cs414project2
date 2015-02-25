@@ -272,7 +272,7 @@ void F() :
 |	<INTEGER_LITERAL>
 |	<TRUE>
 |	<FALSE>
-|	<IDENTIFIER> ((followsvariablenames())?)
+|	<IDENTIFIER> ((followsvariablenamesforexpressions())?)
 |	<NEW> <IDENTIFIER> (variabledeclarations() | (followsnewandidentifier()))
 }
 
@@ -306,6 +306,18 @@ void followsvariablenames() :
 |	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> 
 |	assignmentstatement()
+/* Need a way to make sure that amount of brackets are matched on left side with number on right side */
+|	variabledeclarationstatemementsbrackets()
+|	incrementstatements()
+}
+
+void followsvariablenamesforexpressions() :
+{}
+{
+	/* How to prevent from class types from getting the same rules as variables*/
+	<IDENTIFIER> ((followsvariablenamesforexpressions())*) 
+|	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
+|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> 
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
 |	variabledeclarationstatemementsbrackets()
 |	incrementstatements()
