@@ -274,6 +274,7 @@ void F() :
 |	<FALSE>
 |	<IDENTIFIER> ((followsvariablenamesforexpressions())?)
 |	<NEW> <IDENTIFIER> (followsnewandidentifier() | variabledeclarations())
+|	<LEFT_PARENTHESIS>expression()<RIGHT_PARENTHESIS>
 }
 
 void assignmentstatement() :
