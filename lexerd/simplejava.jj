@@ -123,19 +123,20 @@ void formalparameterlist() :
 void formalparameter() :
 {}
 {
-	variabledeclarations()
+	<IDENTIFIER> <IDENTIFIER> variabledeclarations()
 }
 
 void variabledeclarations() :
 {}
 {	
-	<IDENTIFIER> <IDENTIFIER> ((followsclassdefinitionstypes())*)
+	/* <IDENTIFIER> <IDENTIFIER> ((followsclassdefinitionstypes())*) */
+	((followsclassdefinitionstypes())*)
 }
 
 void variabledefinitions() :
 {}
 {
-	(((variabledeclarations())<SEMICOLON>)*)
+	((<IDENTIFIER> <IDENTIFIER> (variabledeclarations())<SEMICOLON>)*)
 }
 
 void expressionlist() :
@@ -272,7 +273,7 @@ void F() :
 |	<TRUE>
 |	<FALSE>
 |	<IDENTIFIER> ((followsvariablenames())?)
-|	<NEW> (variabledeclarations() | (followsnewandidentifier()))
+|	<NEW> <IDENTIFIER> (variabledeclarations() | (followsnewandidentifier()))
 }
 
 void assignmentstatement() :
