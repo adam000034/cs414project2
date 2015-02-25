@@ -78,6 +78,18 @@ TOKEN :
 |	< IDENTIFIER: ["a"-"z"](["a"-"z","0"-"9"])*>
 }
 
+void incrementstatement() :
+{}
+{
+	<ADD>
+}
+
+void decrementstatement() :
+{}
+{
+	<MINUSMINUS>
+}
+
 void program() :
 {}
 {    
@@ -171,6 +183,14 @@ void statement() :
 |	emptystatement()
 }
 
+void test() :
+{}
+{
+/*	booleanexpression()
+|	<IDENTIFIER> ((expressionsversionfollowsvariablenames())?) */
+expression()
+}
+
 void ifstatement() :
 {}
 {
@@ -211,48 +231,48 @@ void forstatement() :
 void expression() :
 {}
 {
-	eone((<OR>eone)*)
+	expone()((<OR>expone())*)
 }
 
-void eone() :
+void expone() :
 {}
 {
-	etwo((<AND>etwo)*)
+	exptwo()((<AND>exptwo())*)
 }
 
-void etwo() :
+void exptwo() :
 {}
 {
-	ethree((<NOT>ethree)*)
+	expthree()((<NOT>expthree())*)
 }
 
-void ethree() :
+void expthree() :
 {}
 {
-	efour((<EQUAL> | <NOT_EQUAL> | <LESS_THAN> | <LESS_THAN_OR_EQUAL_TO> | <GREATER_THAN> | <GREATER_THAN_OR_EQUAL_TO>) efour)*)	
+	expfour()(((<EQUAL> | <NOT_EQUAL> | <LESS_THAN> | <LESS_THAN_OR_EQUAL_TO> | <GREATER_THAN> | <GREATER_THAN_OR_EQUAL_TO>) expfour())*)	
 }
 
-void efour() :
+void expfour() :
 {}
 {
-	efive(((<PLUS> | <MINUS>)efive)*)
+	expfive()(((<PLUS> | <MINUS>)expfive())*)
 }
 
-void efive() :
+void expfive() :
 {}
 {
-	F(((<MULTIPLY> | <DIVIDE>)F)*)
+	F()(((<TIMES> | <DIVIDE>)F())*)
 }
 
 void F() :
 {}
 {
 	<MINUS> <INTEGER_LITERAL>
-|	<INTERGER_LITERAL>
+|	<INTEGER_LITERAL>
 |	<TRUE>
 |	<FALSE>
 |	<IDENTIFIER> ((followsvariablenames())?)
-|	<NEW> (variabledeclarations() | (<IDENTIFIER> (followsnewandidentifier())))
+|	<NEW> (variabledeclarations() | (followsnewandidentifier()))
 }
 
 void assignmentstatement() :
@@ -261,6 +281,20 @@ void assignmentstatement() :
 	<GETS> expression()
 	/*((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> (followsnewandidentifier())) | (<TRUE>) | (<FALSE>)) */
 
+}
+
+void followsnewandidentifier() :
+{}
+{
+	<LEFT_BRACKET> (followsbrackets())
+|	<LEFT_PARENTHESIS><RIGHT_PARENTHESIS>
+}
+
+void incrementstatements() :
+{}
+{
+	incrementstatement()
+|	decrementstatement()
 }
 
 void followsvariablenames() :
@@ -288,6 +322,6 @@ void variabledeclarationstatemementsbrackets() :
 void followsbrackets() :
 {}
 {
-	expression() <RIGHT_BRACKET>((<LEFT_BRACKET> <RIGHT_BRACKET>)*))| expression() <RIGHT_BRACKET> (((<PERIOD> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())*))) | ((<LEFT_BRACKET> <RIGHT_BRACKET>)*))))
+	expression() ((<RIGHT_BRACKET>((<LEFT_BRACKET> <RIGHT_BRACKET>)*))|((<PERIOD> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())*))) | ((<LEFT_BRACKET> <RIGHT_BRACKET>)*))
 |	<RIGHT_BRACKET> 
 }
