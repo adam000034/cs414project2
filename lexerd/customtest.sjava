@@ -1,4 +1,4 @@
-for (int x = 10; x > c.Num[i]; x++) {}	//
+for (int x = 10; x > Num[i]; x++) {}	//
 c.employees[i].IDnumber = read();
 cab.employees[i].sac[i].bad[jab] = new employee();  //WORKING
 c.employess = new int[c.numEmployees]; //WORKING

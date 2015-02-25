@@ -90,7 +90,7 @@ void program() :
 void functionprototypeordefinition() :
 {}
 {
-	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> ((formalparameterlist())?) <RIGHT_PARENTHESIS> functionendingafterparen()
+	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> ((formalparameterlist())?) <RIGHT_PARENTHESIS> (<SEMICOLON> | <LEFT_BRACE> ((statement())*) <RIGHT_BRACE>)
 }
 
 void functionendingafterparen() :
@@ -112,6 +112,43 @@ void formalparameter() :
 {}
 {
 	variabledeclarations()
+}
+
+void variabledeclarations() :
+{}
+{	
+	<IDENTIFIER> <IDENTIFIER> ((followsclassdefinitionstypes())*)
+}
+
+void variabledefinitions() :
+{}
+{
+	(((variabledeclarations())<SEMICOLON>)*)
+}
+
+void expressionlist() :
+{}
+{
+	expression()((<COMMA>expression())*)
+}
+
+void statementlist() :
+{}
+{
+	statement()((statement())*)
+}
+
+void variable() :
+{}
+{
+	<LEFT_BRACKET> followsbrackets()
+}
+
+void followsclassdefinitionstypes() :
+{}
+{
+	<LEFT_BRACKET> ((followsbrackets())+) 
+
 }
 
 void classdefinitions() :
@@ -137,25 +174,19 @@ void statement() :
 void ifstatement() :
 {}
 {
-	<LEFT_PARENTHESIS> expression() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> statement()
-			((LOOKAHEAD(1) <ELSE> statement())?) 
-	/*<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
-		((LOOKAHEAD(1) <ELSE> statement())?) */
-/*	<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() <ELSE> statement()*/
-/*|	<LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement() */
-
+	<LEFT_PARENTHESIS> expression() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> statement() ((LOOKAHEAD(1) <ELSE> statement())?) 
 }
 
 void emptystatement() :
 {}
 {
 	<SEMICOLON>
-/* May not be necessary but added here anyways just to be sure 
-|	<DO> <LEFT_BRACE> <RIGHT_BRACE> <WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> <SEMICOLON>
-|	<FOR> <LEFT_PARENTHESIS> initialization() <SEMICOLON> test() <SEMICOLON> initialization() <RIGHT_PARENTHESIS> <SEMICOLON>
-|	<IF> <LEFT_PARENTHESIS> expression() <RIGHT_PARENTHESIS> <LEFT_BRACE> <RIGHT_BRACE>
-|	<WHILE> <LEFT_PARENTHESIS> test() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> <SEMICOLON>
-*/
+}
+
+void dowhilestatement() :
+{}
+{
+	<DO> statement() <WHILE> <LEFT_PARENTHESIS> expression() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> 
 }
 
 void initialization() :
@@ -177,109 +208,58 @@ void forstatement() :
 		<RIGHT_PARENTHESIS> statement()
 }
 
-void test() :
-{}
-{
-	booleanexpression()
-|	<IDENTIFIER> ((expressionsversionfollowsvariablenames())?)
-//	expression()
-}
-
-void dowhilestatement() :
-{}
-{
-	<DO> statement() <WHILE> <LEFT_PARENTHESIS> expression() (((<AND> expression())?) | ((<OR> expression())?)) <RIGHT_PARENTHESIS> 
-}
-
 void expression() :
 {}
 {
-	booleanexpression()
-|	<IDENTIFIER> ((expressionsversionfollowsvariablenames())?) ((<SEMICOLON>)?)
-/*	NEW EXPRESSIONS */
-|	<NEW> <IDENTIFIER> followsnewandidentifier() <SEMICOLON>
-/*	OPERATOR EXPRESSIONS */
-/*|	operatorexpressionsvariablesornumbers() */
-|	variable()
+	eone((<OR>eone)*)
 }
 
-void booleanexpression() :
+void eone() :
 {}
 {
-	<TRUE>
+	etwo((<AND>etwo)*)
+}
+
+void etwo() :
+{}
+{
+	ethree((<NOT>ethree)*)
+}
+
+void ethree() :
+{}
+{
+	efour((<EQUAL> | <NOT_EQUAL> | <LESS_THAN> | <LESS_THAN_OR_EQUAL_TO> | <GREATER_THAN> | <GREATER_THAN_OR_EQUAL_TO>) efour)*)	
+}
+
+void efour() :
+{}
+{
+	efive(((<PLUS> | <MINUS>)efive)*)
+}
+
+void efive() :
+{}
+{
+	F(((<MULTIPLY> | <DIVIDE>)F)*)
+}
+
+void F() :
+{}
+{
+	<MINUS> <INTEGER_LITERAL>
+|	<INTERGER_LITERAL>
+|	<TRUE>
 |	<FALSE>
-|	<INTEGER_LITERAL> ((arithmeticandlogic())*)
-}
-
-void incrementstatement() :
-{}
-{
-	<ADD>
-}
-
-void decrementstatement() :
-{}
-{
-	<MINUSMINUS>
-}
-
-void incrementstatements() :
-{}
-{
-	incrementstatement()
-|	decrementstatement()
-}
-
-void variabledeclarations() :
-{}
-{	
-	<IDENTIFIER> <IDENTIFIER> ((followsclassdefinitionstypes())*)
-}
-
-void followsclassdefinitionstypes() :
-{}
-{
-	<LEFT_BRACKET> ((followsbrackets())+) 
-
-}
-
-void variabledefinitions() :
-{}
-{
-	(((variabledeclarations())<SEMICOLON>)*)
-}
-
-
-
-void variable() :
-{}
-{
-	<LEFT_BRACKET> followsbrackets()
-}
-
-void expressionlist() :
-{}
-{
-	expression()((<COMMA>expression())*)
-}
-
-void statementlist() :
-{}
-{
-	statement()((statement())*)
-}
-
-void followsnewandidentifier() :
-{}
-{
-	<LEFT_BRACKET> (followsbrackets())
-|	<LEFT_PARENTHESIS><RIGHT_PARENTHESIS>
+|	<IDENTIFIER> ((followsvariablenames())?)
+|	<NEW> (variabledeclarations() | (<IDENTIFIER> (followsnewandidentifier())))
 }
 
 void assignmentstatement() :
 {}
 {
-	<GETS> ((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> (followsnewandidentifier())) | (<TRUE>) | (<FALSE>))
+	<GETS> expression()
+	/*((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> (followsnewandidentifier())) | (<TRUE>) | (<FALSE>)) */
 
 }
 
@@ -289,22 +269,8 @@ void followsvariablenames() :
 	/* How to prevent from class types from getting the same rules as variables*/
 	<IDENTIFIER> ((followsvariablenames())*) 
 |	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
-|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
-|	arithmeticandlogic() 
+|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> 
 |	assignmentstatement()
-/* Need a way to make sure that amount of brackets are matched on left side with number on right side */
-|	variabledeclarationstatemementsbrackets()
-|	incrementstatements()
-}
-
-void expressionsversionfollowsvariablenames() :
-{}
-{
-	/* How to prevent from class types from getting the same rules as variables*/
-	<IDENTIFIER> ((expressionsversionfollowsvariablenames())*) 
-|	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
-|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>
-|	arithmeticandlogic() 
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
 |	variabledeclarationstatemementsbrackets()
 |	incrementstatements()
@@ -319,61 +285,9 @@ void variabledeclarationstatemementsbrackets() :
 /*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
 }
 
-void followsintegerwithinbrackets() :
-{}
-{
-	(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>) 
-		(<INTEGER_LITERAL>
-		| 
-		((<IDENTIFIER> | (<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>)) (followsidentifierwithinbrackets())*)
-		)
-}
-
-void followsidentifierwithinbrackets() :
-{}
-{
-	(<PLUS>|<MINUS>|<TIMES>|<DIVIDE>) (<IDENTIFIER>|<INTEGER_LITERAL>|(<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS>))
-|	((<PERIOD> <IDENTIFIER>)+)
-}
-
 void followsbrackets() :
 {}
 {
-	((<INTEGER_LITERAL> ((followsintegerwithinbrackets())*) ((arithmeticandlogic())?) <RIGHT_BRACKET>((<LEFT_BRACKET> <RIGHT_BRACKET>)*))| (<IDENTIFIER>((followsidentifierwithinbrackets())*)((arithmeticandlogic())?) <RIGHT_BRACKET> (((<PERIOD> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())*))) | ((<LEFT_BRACKET> <RIGHT_BRACKET>)*))))
-	/*|<IDENTIFIER>) ((arithmeticandlogic())?) <RIGHT_BRACKET> */
+	expression() <RIGHT_BRACKET>((<LEFT_BRACKET> <RIGHT_BRACKET>)*))| expression() <RIGHT_BRACKET> (((<PERIOD> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())*))) | ((<LEFT_BRACKET> <RIGHT_BRACKET>)*))))
 |	<RIGHT_BRACKET> 
-}
-
-void arithmeticandlogic() :
-{}
-{
-	arithmetic()
-|	<GREATER_THAN> (<IDENTIFIER> (((<LEFT_BRACKET> followsbrackets())?) | ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
-|	<LESS_THAN> ((<IDENTIFIER> (((<LEFT_BRACKET> followsbrackets())?) | ((<PERIOD> <IDENTIFIER>((<LEFT_BRACKET> followsbrackets())?))*)) |<INTEGER_LITERAL>))
-|	<LESS_THAN_OR_EQUAL_TO> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
-|	<GREATER_THAN_OR_EQUAL_TO> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
-|	<EQUAL> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
-|	<NOT_EQUAL> ((<IDENTIFIER> ((<PERIOD> (<IDENTIFIER>)((<LEFT_BRACKET> followsbrackets())?))*))|<INTEGER_LITERAL>)
-/* |(<AND> | <OR>) (<IDENTIFIER>|<INTEGER_LITERAL>) */
-}
-
-void arithmetic() :
-{}
-{
-	<PLUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
-|	<MINUS> (<INTEGER_LITERAL>|<IDENTIFIER>)
-|	<DIVIDE> (<INTEGER_LITERAL>|<IDENTIFIER>)
-|	<TIMES> (<INTEGER_LITERAL>|<IDENTIFIER>)
-}
-
-void operatorexpressionsvariables() :
-{}
-{
-	mathstuff()
-}
-
-void mathstuff() :
-{}
-{
-	<IDENTIFIER>
 }
