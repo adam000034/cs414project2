@@ -1,3 +1,15 @@
+int GCD(int x, int y) {
+   int tmp;
+   if (x < y) {
+       tmp = x;
+       x = y;
+       y = tmp; 
+   }
+   if (y == 0)
+      return x;
+   else
+      return GCD(y, mod(x,y));
+}
 abe.abe.abe
 abe [];
 abe [3];

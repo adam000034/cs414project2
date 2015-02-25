@@ -273,6 +273,7 @@ public class simplejava implements simplejavaConstants {
     case RETURN:{
       jj_consume_token(RETURN);
       expression();
+      jj_consume_token(SEMICOLON);
       break;
       }
     case WHILE:{

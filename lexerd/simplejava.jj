@@ -102,7 +102,7 @@ void program() :
 void functionprototypeordefinition() :
 {}
 {
-	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> ((formalparameterlist())?) <RIGHT_PARENTHESIS> (<SEMICOLON> | <LEFT_BRACE> ((statement())*) <RIGHT_BRACE>)
+	<IDENTIFIER> <IDENTIFIER> <LEFT_PARENTHESIS> ((formalparameterlist())?) <RIGHT_PARENTHESIS> (<SEMICOLON> | <LEFT_BRACE> ((statement())*) <RIGHT_BRACE>) 
 }
 
 void functionendingafterparen() :
@@ -174,7 +174,7 @@ void statement() :
 {}
 {
 	dowhilestatement()
-|	<RETURN> expression() 
+|	<RETURN> expression() <SEMICOLON>
 |	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
 |	<IF> ifstatement()
 |	forstatement()
