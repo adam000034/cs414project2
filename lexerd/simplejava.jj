@@ -129,8 +129,7 @@ void formalparameter() :
 void variabledeclarations() :
 {}
 {	
-	/* <IDENTIFIER> <IDENTIFIER> ((followsclassdefinitionstypes())*) */
-	((followsclassdefinitionstypes())*)
+	((<LEFT_BRACKET> <RIGHT_BRACKET>)*)
 }
 
 void variabledefinitions() :
@@ -154,7 +153,9 @@ void statementlist() :
 void variable() :
 {}
 {
-	<LEFT_BRACKET> followsbrackets()
+	((<IDENTIFIER>)?) ((followsvariables())?)
+	
+	/*<LEFT_BRACKET> followsbrackets()*/
 }
 
 void followsclassdefinitionstypes() :
@@ -180,7 +181,7 @@ void statement() :
 |	<IF> ifstatement()
 |	forstatement()
 |	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
-|	<IDENTIFIER> followsvariablenames() <SEMICOLON>
+|	<IDENTIFIER> variable() ((followsvariablenames())?) <SEMICOLON>
 |	emptystatement()
 }
 
@@ -273,7 +274,7 @@ void F() :
 |	<TRUE>
 |	<FALSE>
 |	<IDENTIFIER> ((followsvariablenamesforexpressions())?)
-|	<NEW> <IDENTIFIER> (followsnewandidentifier() | variabledeclarations())
+|	<NEW> <IDENTIFIER> followsnewandidentifier()
 |	<LEFT_PARENTHESIS>expression()<RIGHT_PARENTHESIS>
 }
 
@@ -299,16 +300,22 @@ void incrementstatements() :
 |	decrementstatement()
 }
 
+void followsvariables() :
+{}
+{
+	((<PERIOD> <IDENTIFIER>)+) ((followsvariables())?)
+|	((<LEFT_BRACKET> expression() <RIGHT_BRACKET>)+) ((followsvariables())?)
+}
+
 void followsvariablenames() :
 {}
 {
 	/* How to prevent from class types from getting the same rules as variables*/
-	<IDENTIFIER> ((followsvariablenames())*) 
-|	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenames())?)
-|	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> ((followsvariablenames())?)
+	/*<IDENTIFIER> ((followsvariablenames())*)*/ 
+	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> ((followsvariablenames())?)
 |	assignmentstatement() 
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
-|	variabledeclarationstatemementsbrackets() ((followsvariablenames())?)
+/*|	variabledeclarationstatemementsbrackets() ((followsvariablenames())?)*/
 |	incrementstatements()
 }
 
@@ -320,22 +327,12 @@ void followsvariablenamesforexpressions() :
 |	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenamesforexpressions())?)
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> ((followsvariablenamesforexpressions())?)
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
-|	variabledeclarationstatemementsbrackets() ((followsvariablenamesforexpressions())?)
+/*|	variabledeclarationstatemementsbrackets() ((followsvariablenamesforexpressions())?)*/
 |	incrementstatements()
-}
-
-void variabledeclarationstatemementsbrackets() :
-{}
-{
-	((<LEFT_BRACKET> followsbrackets())+) 
-		((assignmentstatement())?) 		/* [][][]... */
-
-/*	((<LEFT_BRACKET> followsbrackets())+) ((<GETS> <NEW> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())+))?) */
 }
 
 void followsbrackets() :
 {}
 {
-	expression() ((<RIGHT_BRACKET>((<LEFT_BRACKET> <RIGHT_BRACKET>)*))|((<PERIOD> <IDENTIFIER> ((<LEFT_BRACKET> followsbrackets())*))) | ((<LEFT_BRACKET> <RIGHT_BRACKET>)*))
-|	<RIGHT_BRACKET> 
+	expression() <RIGHT_BRACKET>((<LEFT_BRACKET><RIGHT_BRACKET>)*)
 }
