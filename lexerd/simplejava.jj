@@ -176,7 +176,7 @@ void statement() :
 {}
 {
 	dowhilestatement()
-|	<RETURN> expression() <SEMICOLON>
+|	<RETURN> ((expression())?) <SEMICOLON>
 |	<WHILE> <LEFT_PARENTHESIS> test() <RIGHT_PARENTHESIS> statement()
 |	<IF> ifstatement()
 |	forstatement()
