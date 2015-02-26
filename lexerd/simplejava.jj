@@ -328,6 +328,7 @@ void followsvariablenamesforexpressions() :
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> ((followsvariablenamesforexpressions())?)
 /* Need a way to make sure that amount of brackets are matched on left side with number on right side */
 /*|	variabledeclarationstatemementsbrackets() ((followsvariablenamesforexpressions())?)*/
+|	((<LEFT_BRACKET> expression() <RIGHT_BRACKET>)+) ((followsvariablenamesforexpressions())?) 
 |	incrementstatements()
 }
 
