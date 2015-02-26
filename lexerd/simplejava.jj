@@ -181,7 +181,7 @@ void statement() :
 |	<IF> ifstatement()
 |	forstatement()
 |	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
-|	<IDENTIFIER> ((<IDENTIFIER> variabledeclarations())| (variable() ((followsvariablenames())?))) <SEMICOLON>
+|	<IDENTIFIER> ((<IDENTIFIER> variabledeclarations())| variable()) ((followsvariablenames())?) <SEMICOLON>
 |	emptystatement()
 }
 
