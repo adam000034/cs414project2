@@ -1,3 +1,8 @@
+/* 
+ * PROJECT 2
+ * AUTHORS: Austin Au-Yeung, Adam Toth-Fejel
+ */
+
 options {
   IGNORE_CASE=true;
 }
@@ -93,10 +98,8 @@ void decrementstatement() :
 void program() :
 {}
 {    
-/*perhaps put a star there to check multiple statements */
 	/* 1) 0 or more class defs	2) 0 or more function defs	3) EOF */
 	((classdefinitions())*) ((functionprototypeordefinition())*) <EOF> 
-//	expression() <EOF>
 }
 
 void functionprototypeordefinition() :
@@ -154,8 +157,6 @@ void variable() :
 {}
 {
 	((followsvariables())?)
-	
-	/*<LEFT_BRACKET> followsbrackets()*/
 }
 
 void followsclassdefinitionstypes() :
@@ -181,6 +182,7 @@ void statement() :
 |	<IF> ifstatement()
 |	forstatement()
 |	<LEFT_BRACE> ((statement())*) <RIGHT_BRACE>
+	/* if two ids, declaration, if one id, initialization */
 |	<IDENTIFIER> ((<IDENTIFIER> variabledeclarations())| variable()) ((followsvariablenames())?) <SEMICOLON>
 |	emptystatement()
 }
@@ -188,9 +190,7 @@ void statement() :
 void test() :
 {}
 {
-/*	booleanexpression()
-|	<IDENTIFIER> ((expressionsversionfollowsvariablenames())?) */
-expression()
+	expression()
 }
 
 void ifstatement() :
@@ -282,8 +282,6 @@ void assignmentstatement() :
 {}
 {
 	<GETS> expression()
-	/*((<IDENTIFIER> ((followsvariablenames())?)) | (<INTEGER_LITERAL>) | (<NEW> <IDENTIFIER> (followsnewandidentifier())) | (<TRUE>) | (<FALSE>)) */
-
 }
 
 void followsnewandidentifier() :
@@ -310,24 +308,17 @@ void followsvariables() :
 void followsvariablenames() :
 {}
 {
-	/* How to prevent from class types from getting the same rules as variables*/
-	/*<IDENTIFIER> ((followsvariablenames())*)*/ 
 	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> ((followsvariablenames())?)
 |	assignmentstatement() 
-/* Need a way to make sure that amount of brackets are matched on left side with number on right side */
-/*|	variabledeclarationstatemementsbrackets() ((followsvariablenames())?)*/
 |	incrementstatements()
 }
 
 void followsvariablenamesforexpressions() :
 {}
 {
-	/* How to prevent from class types from getting the same rules as variables*/
 	<IDENTIFIER> ((followsvariablenamesforexpressions())*) 
 |	((<PERIOD> <IDENTIFIER>)+) ((followsvariablenamesforexpressions())?)
 |	<LEFT_PARENTHESIS> ((expressionlist())?) <RIGHT_PARENTHESIS> ((followsvariablenamesforexpressions())?)
-/* Need a way to make sure that amount of brackets are matched on left side with number on right side */
-/*|	variabledeclarationstatemementsbrackets() ((followsvariablenamesforexpressions())?)*/
 |	((<LEFT_BRACKET> expression() <RIGHT_BRACKET>)+) ((followsvariablenamesforexpressions())?) 
 |	incrementstatements()
 }
